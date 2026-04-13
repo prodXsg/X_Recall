@@ -1,7 +1,7 @@
 
-  # X Recall v1
+  # X Recall
 
-  This is a code bundle for X Recall v1. The original project is available at https://x-recall-prototype-9v6n8zrnk-surya7824-4336s-projects.vercel.app
+  This is a code bundle for X Recall v1. The original project is available at https://x-recall-prototype.vercel.app/
 
   ## Running the code
 
