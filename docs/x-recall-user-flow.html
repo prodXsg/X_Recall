@@ -75,27 +75,313 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .gap{height:28px}.gap-sm{height:16px}
 </style>
 </head>
-
 <body>
-
 <div class="hero">
   <div class="hero-top">
     <svg class="x-logo" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
     <span class="badge">X Recall</span>
   </div>
-
   <h1>User Flow</h1>
   <p>End-to-end journey from app open through feed scroll, AI classification, library management, and correction loop</p>
+<div class="hero-links">
+  <a href="https://x-recall-prototype.vercel.app/" class="proto-btn" target="_blank">
+    View live prototype
+  </a>
+  <a href="https://github.com/prodXsg/X_Recall_prototype" class="sec-btn" target="_blank">
+    GitHub repo
+  </a>
+</div>
+</div>
+<div class="wrap">
 
-  <div class="hero-links">
-    <a href="https://x-recall-prototype.vercel.app/" class="proto-btn" target="_blank">View live prototype</a>
-    <a href="https://github.com/prodXsg/X_Recall_prototype" class="sec-btn" target="_blank">GitHub repo</a>
+<!-- A -->
+<div class="phase pa">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">A</span>Initialization</div></div>
+  <div class="grid">
+    <div class="decision-wrap">
+      <div class="decision">
+        <div class="decision-label">On every app load</div>
+        <div class="decision-q">Does localStorage have saved data?</div>
+        <div class="decision-branches">
+          <span class="branch br-yes">Yes — load persisted state</span>
+          <span class="branch br-no">No — load seed demo data</span>
+        </div>
+      </div>
+    </div>
+    <div class="sub-grid">
+      <div class="sub-card"><div class="sub-card-title">Returning user</div><div class="sub-card-body">Reads all three localStorage keys. Restores exact bookmarks, folders, and correction history from last session. Seed data is skipped entirely.</div></div>
+      <div class="sub-card"><div class="sub-card-title">First visit</div><div class="sub-card-body">Loads 40 demo tweets across 5 folders: Dev Resources, Crypto, Design, Automobiles, Sports. Unique avatars per author. Writes to localStorage immediately.</div></div>
+    </div>
   </div>
 </div>
 
-<div class="wrap">
-<!-- YOUR ENTIRE ORIGINAL FLOW CONTINUES EXACTLY SAME -->
+<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+
+<!-- B -->
+<div class="phase pa">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">B</span>Entry</div></div>
+  <div class="grid g2">
+    <div class="card cab">
+      <div class="card-num">1</div>
+      <div class="card-tag">Feed screen</div>
+      <div class="card-title">For You feed loads</div>
+      <div class="card-desc">User lands on the algorithmic feed. 25 tweets memoized. Ads interleave every 5 tweets. Two tabs available.</div>
+      <ul class="card-features">
+        <li>For You and Following tabs with animated indicator</li>
+        <li>Ads interleaved every 5 tweets with intent signals</li>
+        <li>Stateful like and retweet buttons per tweet</li>
+        <li>iOS status bar, Grok nav icon, profile drawer</li>
+        <li>Three-dot menu: Not interested, Mute, Block, Report</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-num">2</div>
+      <div class="card-tag">Profile drawer</div>
+      <div class="card-title">Tap avatar to open drawer</div>
+      <div class="card-desc">Tapping the top-left avatar slides in the profile drawer. Direct navigation to Library available from here.</div>
+      <ul class="card-features">
+        <li>Verified badge, follower and following counts</li>
+        <li>Nav items: Profile, Lists, Bookmarks, Spaces</li>
+        <li>Bookmarks tap navigates directly to Library</li>
+        <li>Spring animation with backdrop on open and close</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
+<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+
+<!-- C -->
+<div class="phase pb">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">C</span>Bookmark and AI Classification</div></div>
+  <div class="grid">
+    <div class="grid g2">
+      <div class="card cap">
+        <div class="card-num">3</div>
+        <div class="card-tag">Core interaction</div>
+        <div class="card-title">User taps the bookmark icon</div>
+        <div class="card-desc">A single tap triggers the entire X Recall system. No folder picker. No modal. No interruption to scroll flow.</div>
+        <ul class="card-features">
+          <li>Bookmark icon fills blue with scale animation</li>
+          <li>Already-bookmarked tweet triggers removal flow</li>
+          <li>AI classification runs synchronously before render</li>
+          <li>No async delay, no setTimeout, no race condition</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-num">4</div>
+        <div class="card-tag">AI engine</div>
+        <div class="card-title">Grok classifies the tweet</div>
+        <div class="card-desc">Three signals run in priority order. Result returned synchronously with category, confidence score, and matched keywords.</div>
+        <ul class="card-features">
+          <li>Signal 1: Learned corrections — checks user history first</li>
+          <li>Signal 2: Semantic analysis — keyword match on content and author</li>
+          <li>Signal 3: Author authority — Bayesian prior from account type</li>
+          <li>Trust score adjusts confidence ceiling dynamically</li>
+        </ul>
+      </div>
+    </div>
+    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+    <div class="decision-wrap">
+      <div class="decision">
+        <div class="decision-label">Confidence threshold</div>
+        <div class="decision-q">Confidence score 75% or above?</div>
+        <div class="decision-branches">
+          <span class="branch br-yes">Yes — auto-file to folder</span>
+          <span class="branch br-no">No — Unsorted inbox</span>
+        </div>
+      </div>
+    </div>
+    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+    <div class="sub-grid">
+      <div class="sub-card"><div class="sub-card-title">High confidence path</div><div class="sub-card-body">Tweet filed into matched folder automatically. New folder created and color-assigned if needed. Most recently used folder bubbles to top. Persist to localStorage.</div></div>
+      <div class="sub-card"><div class="sub-card-title">Low confidence path</div><div class="sub-card-body">Tweet routes to Unsorted inbox instead of auto-filing incorrectly. User reviews and moves manually. Every move trains the model for next time.</div></div>
+    </div>
+    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+    <div class="grid g1">
+      <div class="card cap">
+        <div class="card-num">5</div>
+        <div class="card-tag">Feedback moment</div>
+        <div class="card-title">Toast: "Saved to [Folder]"</div>
+        <div class="card-desc">Ambient toast confirms classification without interrupting scroll. Tap to navigate to the folder or let it autodismiss after 2.8 seconds.</div>
+        <ul class="card-features">
+          <li>Shows folder name and confidence percentage inline</li>
+          <li>High confidence: "Grok is 84% confident"</li>
+          <li>Low confidence: "AI suggested — tap to change folder"</li>
+          <li>Tapping navigates to Library instantly</li>
+          <li>Autodismiss after 2.8 seconds</li>
+          <li>Removal variant: "Removed from [Folder]"</li>
+          <li>Trust score increases +2 on every accepted save</li>
+        </ul>
+        <span class="card-cta">Zero-click core moment</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+
+<!-- D -->
+<div class="phase pc">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">D</span>Library Screen</div></div>
+  <div class="grid g2">
+    <div class="card cat">
+      <div class="card-num">6</div>
+      <div class="card-tag">Core screen</div>
+      <div class="card-title">Library screen</div>
+      <div class="card-desc">The organized knowledge library. State loaded from localStorage on mount. Every saved tweet sorted into folders with counts.</div>
+      <ul class="card-features">
+        <li>All tab with total bookmark count badge</li>
+        <li>Folder chips sorted by most recently used</li>
+        <li>Each chip shows tweet count badge</li>
+        <li>Active chip has inline pencil icon for instant rename</li>
+        <li>Semantic search across content, author, and handle</li>
+        <li>Folder chips stay visible during search</li>
+        <li>Tweets sorted by bookmarkedAt descending</li>
+        <li>Reset button: clears localStorage and reloads for demos</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-num">7</div>
+      <div class="card-tag">Folder management</div>
+      <div class="card-title">Long press or pencil to manage</div>
+      <div class="card-desc">Long pressing any folder chip for 650ms opens an action sheet. Pencil icon on active chip opens rename directly.</div>
+      <ul class="card-features">
+        <li>Rename: validates for empty name and duplicates</li>
+        <li>Delete: confirmation step with destructive warning</li>
+        <li>Delete removes all tweets in the folder</li>
+        <li>Auto-navigate away if active folder is deleted</li>
+        <li>All changes persist to localStorage immediately</li>
+        <li>onPointerCancel prevents stuck long press on mobile</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+
+<!-- E -->
+<div class="phase pd">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">E</span>Action Paths in Library</div></div>
+  <div class="decision-wrap" style="margin-bottom:16px">
+    <div class="decision">
+      <div class="decision-label">User action in Library</div>
+      <div class="decision-q">What does the user do next?</div>
+      <div class="decision-branches">
+        <span class="branch br-a">Search</span>
+        <span class="branch br-b">Tap tweet menu</span>
+        <span class="branch br-c">Long press chip</span>
+        <span class="branch br-d">Tap bookmark icon</span>
+      </div>
+    </div>
+  </div>
+  <div class="grid g3">
+    <div class="card">
+      <div class="card-num">8</div>
+      <div class="card-tag">Search path</div>
+      <div class="card-title">Semantic search</div>
+      <div class="card-desc">Typing filters across all bookmarks simultaneously regardless of active folder.</div>
+      <ul class="card-features">
+        <li>Filters on content, author name, and handle</li>
+        <li>Cross-folder — all bookmarks at once</li>
+        <li>Folder chips stay visible during search</li>
+        <li>No-results state with suggestion copy</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-num">9</div>
+      <div class="card-tag">Tweet menu path</div>
+      <div class="card-title">Tweet action sheet</div>
+      <div class="card-desc">Three-dot menu opens a bottom sheet: move the tweet or ask why the AI filed it here.</div>
+      <ul class="card-features">
+        <li>Move to another folder — shows all folders with counts</li>
+        <li>Why was this saved here — AI explanation sheet</li>
+        <li>Spring animation on open and close</li>
+        <li>Single ActiveSheet union type — no invalid states</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-num">10</div>
+      <div class="card-tag">Remove path</div>
+      <div class="card-title">Remove bookmark</div>
+      <div class="card-desc">Tapping the filled bookmark icon removes the tweet. Auto-deletes the folder if it was the last tweet.</div>
+      <ul class="card-features">
+        <li>Dispatch REMOVE action to reducer</li>
+        <li>Trust score increases by 2</li>
+        <li>Auto-delete empty folder after removal</li>
+        <li>Persist updated store to localStorage</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+
+<!-- F -->
+<div class="phase pe">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">F</span>Correction Loop</div></div>
+  <div class="grid">
+    <div class="grid g2">
+      <div class="card cac">
+        <div class="card-num">11</div>
+        <div class="card-tag">Move flow</div>
+        <div class="card-title">Move to a different folder</div>
+        <div class="card-desc">User moves a tweet to a different folder than the AI chose. Correction is logged, keyword pattern stored, trust score adjusted.</div>
+        <ul class="card-features">
+          <li>Bottom sheet lists all other folders with counts</li>
+          <li>Dispatch MOVE: fromId to toId</li>
+          <li>autoAssigned set to false on the tweet</li>
+          <li>CorrectionRecord written with keyword and timestamp</li>
+          <li>Trust score decreases by 4</li>
+          <li>Persisted to xrecall_corrections in localStorage</li>
+          <li>Toast: "Moved to [Folder]"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-num">12</div>
+        <div class="card-tag">Explanation flow</div>
+        <div class="card-title">AI explanation sheet</div>
+        <div class="card-desc">Full transparency into why the AI filed a tweet here. Shows the reasoning, confidence, and how to teach it.</div>
+        <ul class="card-features">
+          <li>Category name and matched keywords displayed</li>
+          <li>Animated confidence bar with percentage</li>
+          <li>Current trust score shown</li>
+          <li>Prompt: move the tweet and Grok learns</li>
+          <li>Got it CTA closes and returns to Library</li>
+        </ul>
+      </div>
+    </div>
+    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
+    <div class="grid g1">
+      <div class="card cac">
+        <div class="card-num">13</div>
+        <div class="card-tag">Learning system</div>
+        <div class="card-title">Correction history closes the loop — persisted across sessions</div>
+        <div class="card-desc">Every correction is written to localStorage. On next app load, the AI has full memory of your preferences and classifies similar tweets correctly from the first attempt.</div>
+        <ul class="card-features">
+          <li>Correction history is the highest priority signal in the inference engine</li>
+          <li>Matched keyword routes to corrected category at confidence 0.88 to 0.98</li>
+          <li>Trust score rises with accepted saves (+2) and falls with corrections (-4)</li>
+          <li>Persisted to xrecall_corrections — survives page refresh</li>
+          <li>System converges toward accurate classification over time</li>
+        </ul>
+        <span class="card-cta">Live feedback loop — persisted</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-title">Phase legend</div>
+  <div class="legend-grid">
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9BF0"></div>A–B — Initialization and entry</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>C — Bookmark and AI classification</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>D — Library screen</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#854F0B"></div>E — Action paths</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#993C1D"></div>F — Correction loop</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d0d0c8"></div>Decision point</div>
+  </div>
+</div>
+</div>
 </body>
 </html>
