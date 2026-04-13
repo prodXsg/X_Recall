@@ -1,153 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X Recall - User Flow</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Flow</title>
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f8fafc;
-      margin: 0;
-      padding: 40px;
-      color: #111;
-      text-align: center;
-    }
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f8fafc; margin:0; padding:40px; text-align:center; }
+h1 { font-size:40px; }
+p { color:#555; max-width:700px; margin:auto; }
 
-    .badge {
-      display: inline-block;
-      background: #1da1f2;
-      color: white;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 10px;
-    }
+.btn { padding:12px 20px; border-radius:25px; text-decoration:none; margin:10px; display:inline-block; }
+.primary { background:black; color:white; }
+.secondary { border:1px solid #ccc; color:black; }
 
-    h1 {
-      font-size: 42px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
+.section { background:white; padding:25px; margin:30px auto; max-width:800px; border-radius:10px; text-align:left; }
 
-    p {
-      color: #555;
-      font-size: 18px;
-      max-width: 700px;
-      margin: 0 auto 30px;
-      line-height: 1.6;
-    }
-
-    .buttons {
-      margin-bottom: 40px;
-    }
-
-    .primary-btn {
-      display: inline-block;
-      background: black;
-      color: white;
-      padding: 14px 24px;
-      border-radius: 30px;
-      text-decoration: none;
-      margin-right: 10px;
-    }
-
-    .secondary-btn {
-      display: inline-block;
-      border: 1px solid #ccc;
-      padding: 14px 24px;
-      border-radius: 30px;
-      text-decoration: none;
-      color: black;
-    }
-
-    .section {
-      max-width: 900px;
-      margin: 40px auto;
-      text-align: left;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      border: 1px solid #eee;
-    }
-
-    .section h2 {
-      margin-bottom: 10px;
-    }
-
-    .section p {
-      margin: 0;
-      color: #444;
-    }
-  </style>
+.nav { margin-top:40px; }
+.nav a { margin:0 10px; text-decoration:none; color:#0077cc; }
+</style>
 </head>
 
 <body>
 
-  <div>
-    <span style="font-size:28px;">X</span>
-    <span class="badge">X RECALL</span>
-  </div>
+<h1>User Flow</h1>
 
-  <h1>User Flow</h1>
+<p>End-to-end journey from discovering content to recalling it later using AI.</p>
 
-  <p>
-    X Recall enables users to instantly find and revisit previously seen content without relying on memory, bookmarks, or manual search.
-  </p>
+<a href="https://x-recall-prototype.vercel.app/" class="btn primary" target="_blank">
+View live prototype
+</a>
 
-  <div class="buttons">
-    <a href="https://x-recall-prototype-9v6n8zrnk-surya7824-4336s-projects.vercel.app/" class="primary-btn" target="_blank">
-      View live prototype
-    </a>
+<a href="https://github.com/prodXsg/X_Recall_prototype" class="btn secondary" target="_blank">
+GitHub repo
+</a>
 
-    <a href="https://github.com/prodXsg/X_Recall_prototype" class="secondary-btn" target="_blank">
-      GitHub repo
-    </a>
-  </div>
+<div class="section">
+<h2>Trigger</h2>
+<p>User remembers seeing something but cannot find it again.</p>
+</div>
 
-  <div class="section">
-    <h2>Trigger</h2>
-    <p>
-      The user remembers seeing a tweet or piece of content earlier but cannot find it again through traditional scrolling or search.
-    </p>
-  </div>
+<div class="section">
+<h2>Query</h2>
+<p>User enters natural language like “that startup funding tweet”.</p>
+</div>
 
-  <div class="section">
-    <h2>Entry Point</h2>
-    <p>
-      The user accesses X Recall through a dedicated entry point within the app, such as a search bar or recall button integrated into the interface.
-    </p>
-  </div>
+<div class="section">
+<h2>AI Processing</h2>
+<p>System matches semantic meaning with previously seen content.</p>
+</div>
 
-  <div class="section">
-    <h2>Query / Intent</h2>
-    <p>
-      The user describes what they remember in natural language, such as keywords, topics, or partial context, instead of exact matches.
-    </p>
-  </div>
+<div class="section">
+<h2>Results</h2>
+<p>Relevant past content is shown instantly.</p>
+</div>
 
-  <div class="section">
-    <h2>Processing</h2>
-    <p>
-      The system interprets the query, matches it against previously seen content using semantic understanding, and retrieves relevant results.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>Results</h2>
-    <p>
-      The user is shown a ranked list of relevant past content, allowing them to quickly identify and access what they were looking for.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>Feedback Loop</h2>
-    <p>
-      The system improves over time by learning from user interactions, such as clicks or refinements, enhancing future recall accuracy.
-    </p>
-  </div>
+<div class="nav">
+<a href="x-recall-user-flow.html">User Flow</a>
+<a href="x-recall-ai-architecture.html">AI Architecture</a>
+<a href="x-recall-technical-architecture.html">Technical Architecture</a>
+</div>
 
 </body>
 </html>
