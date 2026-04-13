@@ -1,7 +1,7 @@
 
   # X Recall v1
 
-  This is a code bundle for X Recall v1. The original project is available at https://www.figma.com/design/9OZxmXJ417njiwF6LOSHm1/X-Recall-v1.
+  This is a code bundle for X Recall v1. The original project is available at https://x-recall-prototype-9v6n8zrnk-surya7824-4336s-projects.vercel.app
 
   ## Running the code
 
