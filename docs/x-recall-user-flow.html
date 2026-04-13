@@ -1,383 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>X Recall — User Flow</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;line-height:1.6}
-.hero{background:#fff;border-bottom:1px solid #e5e5e0;padding:52px 32px 44px;text-align:center}
-.hero-top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}
-.x-logo{width:24px;height:24px;fill:#000}
-.badge{background:#1D9BF0;color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:20px;text-transform:uppercase}
-.hero h1{font-size:30px;font-weight:700;color:#0f0f0f;letter-spacing:-.5px;margin-bottom:8px}
-.hero p{font-size:14px;color:#555;max-width:520px;margin:0 auto 24px;line-height:1.6}
-.hero-links{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
-.proto-btn{display:inline-flex;align-items:center;gap:6px;background:#000;color:#fff;font-size:13px;font-weight:600;padding:9px 20px;border-radius:22px;text-decoration:none}
-.sec-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#1a1a1a;font-size:13px;font-weight:600;padding:8px 18px;border-radius:22px;text-decoration:none;border:1px solid #d0d0c8}
-.wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
-.phase-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.phase-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.phase-letter{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
-.pa .phase-pill{background:#EBF5FF;color:#185FA5}.pa .phase-letter{background:#1D9BF0;color:#fff}
-.pb .phase-pill{background:#F0EFFE;color:#3C3489}.pb .phase-letter{background:#534AB7;color:#fff}
-.pc .phase-pill{background:#E3F6EF;color:#085041}.pc .phase-letter{background:#0F6E56;color:#fff}
-.pd .phase-pill{background:#FEF4E3;color:#633806}.pd .phase-letter{background:#854F0B;color:#fff}
-.pe .phase-pill{background:#FAEEE9;color:#712B13}.pe .phase-letter{background:#993C1D;color:#fff}
-.grid{display:grid;gap:12px}
-.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g1{grid-template-columns:1fr}
-@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #e5e5e0;border-radius:10px;padding:18px 18px 16px;position:relative}
-.card-num{position:absolute;top:-11px;left:16px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2px solid #f5f5f0;color:#fff}
-.card-tag{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;margin-top:2px}
-.card-title{font-size:14px;font-weight:700;color:#0f0f0f;margin-bottom:5px;line-height:1.4}
-.card-desc{font-size:12px;color:#666;margin-bottom:12px;line-height:1.55}
-.card-features{list-style:none;display:flex;flex-direction:column;gap:5px}
-.card-features li{font-size:12px;color:#444;display:flex;gap:7px;align-items:flex-start;line-height:1.45}
-.card-features li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.card-cta{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:12px}
-.pa .card-num{background:#1D9BF0}.pa .card-tag{color:#1D9BF0}.pa .card-features li::before{background:#1D9BF0}.pa .card-cta{background:#EBF5FF;color:#185FA5}
-.pb .card-num{background:#534AB7}.pb .card-tag{color:#534AB7}.pb .card-features li::before{background:#7F77DD}.pb .card-cta{background:#F0EFFE;color:#3C3489}
-.pc .card-num{background:#0F6E56}.pc .card-tag{color:#0F6E56}.pc .card-features li::before{background:#1D9E75}.pc .card-cta{background:#E3F6EF;color:#085041}
-.pd .card-num{background:#854F0B}.pd .card-tag{color:#854F0B}.pd .card-features li::before{background:#BA7517}.pd .card-cta{background:#FEF4E3;color:#633806}
-.pe .card-num{background:#993C1D}.pe .card-tag{color:#993C1D}.pe .card-features li::before{background:#D85A30}.pe .card-cta{background:#FAEEE9;color:#712B13}
-.cab{border-color:#B5D4F4;background:#FAFCFF}
-.cap{border-color:#CECBF6;background:#FDFCFF}
-.cat{border-color:#9FE1CB;background:#FAFFFE}
-.cac{border-color:#F5C4B3;background:#FFFAF8}
-.decision-wrap{display:flex;justify-content:center;margin:4px 0}
-.decision{background:#fff;border:1.5px solid #d0d0c8;border-radius:8px;padding:14px 20px;text-align:center;max-width:440px;width:100%}
-.decision-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:4px}
-.decision-q{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:10px}
-.decision-branches{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
-.branch{font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px}
-.br-yes{background:#E3F6EF;color:#085041;border:1px solid #5DCAA5}
-.br-no{background:#FEF4E3;color:#633806;border:1px solid #EF9F27}
-.br-a{background:#EBF5FF;color:#185FA5;border:1px solid #85B7EB}
-.br-b{background:#F0EFFE;color:#3C3489;border:1px solid #AFA9EC}
-.br-c{background:#FAEEE9;color:#712B13;border:1px solid #F0997B}
-.br-d{background:#E3F6EF;color:#085041;border:1px solid #5DCAA5}
-.conn{display:flex;flex-direction:column;align-items:center;padding:6px 0}
-.conn-line{width:1.5px;height:22px;background:#d0d0c8}
-.conn-arrow{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #c0c0b8}
-.psep{height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
-@media(max-width:520px){.sub-grid{grid-template-columns:1fr}}
-.sub-card{background:#f9f9f6;border:1px solid #e8e8e2;border-radius:8px;padding:14px}
-.sub-card-title{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:5px}
-.sub-card-body{font-size:12px;color:#666;line-height:1.5}
-.legend{margin-top:44px;padding:18px 20px;background:#fff;border:1px solid #e5e5e0;border-radius:10px}
-.legend-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
-.legend-grid{display:flex;flex-wrap:wrap;gap:10px 20px}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
-.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.gap{height:28px}.gap-sm{height:16px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X Recall - User Flow</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 40px;
+      color: #111;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #1da1f2;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      margin-bottom: 40px;
+    }
+
+    .primary-btn {
+      display: inline-block;
+      background: black;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    .secondary-btn {
+      display: inline-block;
+      border: 1px solid #ccc;
+      padding: 14px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      color: black;
+    }
+
+    .section {
+      max-width: 900px;
+      margin: 40px auto;
+      text-align: left;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #eee;
+    }
+
+    .section h2 {
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      margin: 0;
+      color: #444;
+    }
+  </style>
 </head>
+
 <body>
-<div class="hero">
-  <div class="hero-top">
-    <svg class="x-logo" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-    <span class="badge">X Recall</span>
+
+  <div>
+    <span style="font-size:28px;">X</span>
+    <span class="badge">X RECALL</span>
   </div>
+
   <h1>User Flow</h1>
-  <p>End-to-end journey from app open through feed scroll, AI classification, library management, and correction loop</p>
-  <div class="hero-links">
-    <a href="PASTE_VERCEL_LINK" class="proto-btn">View live prototype</a>
-    <a href="PASTE_GITHUB_LINK" class="sec-btn">GitHub repo</a>
+
+  <p>
+    X Recall enables users to instantly find and revisit previously seen content without relying on memory, bookmarks, or manual search.
+  </p>
+
+  <div class="buttons">
+    <a href="https://x-recall-prototype-9v6n8zrnk-surya7824-4336s-projects.vercel.app/" class="primary-btn" target="_blank">
+      View live prototype
+    </a>
+
+    <a href="https://github.com/prodXsg/X_Recall_prototype" class="secondary-btn" target="_blank">
+      GitHub repo
+    </a>
   </div>
-</div>
-<div class="wrap">
 
-<!-- A -->
-<div class="phase pa">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">A</span>Initialization</div></div>
-  <div class="grid">
-    <div class="decision-wrap">
-      <div class="decision">
-        <div class="decision-label">On every app load</div>
-        <div class="decision-q">Does localStorage have saved data?</div>
-        <div class="decision-branches">
-          <span class="branch br-yes">Yes — load persisted state</span>
-          <span class="branch br-no">No — load seed demo data</span>
-        </div>
-      </div>
-    </div>
-    <div class="sub-grid">
-      <div class="sub-card"><div class="sub-card-title">Returning user</div><div class="sub-card-body">Reads all three localStorage keys. Restores exact bookmarks, folders, and correction history from last session. Seed data is skipped entirely.</div></div>
-      <div class="sub-card"><div class="sub-card-title">First visit</div><div class="sub-card-body">Loads 40 demo tweets across 5 folders: Dev Resources, Crypto, Design, Automobiles, Sports. Unique avatars per author. Writes to localStorage immediately.</div></div>
-    </div>
+  <div class="section">
+    <h2>Trigger</h2>
+    <p>
+      The user remembers seeing a tweet or piece of content earlier but cannot find it again through traditional scrolling or search.
+    </p>
   </div>
-</div>
 
-<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-
-<!-- B -->
-<div class="phase pa">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">B</span>Entry</div></div>
-  <div class="grid g2">
-    <div class="card cab">
-      <div class="card-num">1</div>
-      <div class="card-tag">Feed screen</div>
-      <div class="card-title">For You feed loads</div>
-      <div class="card-desc">User lands on the algorithmic feed. 25 tweets memoized. Ads interleave every 5 tweets. Two tabs available.</div>
-      <ul class="card-features">
-        <li>For You and Following tabs with animated indicator</li>
-        <li>Ads interleaved every 5 tweets with intent signals</li>
-        <li>Stateful like and retweet buttons per tweet</li>
-        <li>iOS status bar, Grok nav icon, profile drawer</li>
-        <li>Three-dot menu: Not interested, Mute, Block, Report</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-num">2</div>
-      <div class="card-tag">Profile drawer</div>
-      <div class="card-title">Tap avatar to open drawer</div>
-      <div class="card-desc">Tapping the top-left avatar slides in the profile drawer. Direct navigation to Library available from here.</div>
-      <ul class="card-features">
-        <li>Verified badge, follower and following counts</li>
-        <li>Nav items: Profile, Lists, Bookmarks, Spaces</li>
-        <li>Bookmarks tap navigates directly to Library</li>
-        <li>Spring animation with backdrop on open and close</li>
-      </ul>
-    </div>
+  <div class="section">
+    <h2>Entry Point</h2>
+    <p>
+      The user accesses X Recall through a dedicated entry point within the app, such as a search bar or recall button integrated into the interface.
+    </p>
   </div>
-</div>
 
-<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-
-<!-- C -->
-<div class="phase pb">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">C</span>Bookmark and AI Classification</div></div>
-  <div class="grid">
-    <div class="grid g2">
-      <div class="card cap">
-        <div class="card-num">3</div>
-        <div class="card-tag">Core interaction</div>
-        <div class="card-title">User taps the bookmark icon</div>
-        <div class="card-desc">A single tap triggers the entire X Recall system. No folder picker. No modal. No interruption to scroll flow.</div>
-        <ul class="card-features">
-          <li>Bookmark icon fills blue with scale animation</li>
-          <li>Already-bookmarked tweet triggers removal flow</li>
-          <li>AI classification runs synchronously before render</li>
-          <li>No async delay, no setTimeout, no race condition</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-num">4</div>
-        <div class="card-tag">AI engine</div>
-        <div class="card-title">Grok classifies the tweet</div>
-        <div class="card-desc">Three signals run in priority order. Result returned synchronously with category, confidence score, and matched keywords.</div>
-        <ul class="card-features">
-          <li>Signal 1: Learned corrections — checks user history first</li>
-          <li>Signal 2: Semantic analysis — keyword match on content and author</li>
-          <li>Signal 3: Author authority — Bayesian prior from account type</li>
-          <li>Trust score adjusts confidence ceiling dynamically</li>
-        </ul>
-      </div>
-    </div>
-    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-    <div class="decision-wrap">
-      <div class="decision">
-        <div class="decision-label">Confidence threshold</div>
-        <div class="decision-q">Confidence score 75% or above?</div>
-        <div class="decision-branches">
-          <span class="branch br-yes">Yes — auto-file to folder</span>
-          <span class="branch br-no">No — Unsorted inbox</span>
-        </div>
-      </div>
-    </div>
-    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-    <div class="sub-grid">
-      <div class="sub-card"><div class="sub-card-title">High confidence path</div><div class="sub-card-body">Tweet filed into matched folder automatically. New folder created and color-assigned if needed. Most recently used folder bubbles to top. Persist to localStorage.</div></div>
-      <div class="sub-card"><div class="sub-card-title">Low confidence path</div><div class="sub-card-body">Tweet routes to Unsorted inbox instead of auto-filing incorrectly. User reviews and moves manually. Every move trains the model for next time.</div></div>
-    </div>
-    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-    <div class="grid g1">
-      <div class="card cap">
-        <div class="card-num">5</div>
-        <div class="card-tag">Feedback moment</div>
-        <div class="card-title">Toast: "Saved to [Folder]"</div>
-        <div class="card-desc">Ambient toast confirms classification without interrupting scroll. Tap to navigate to the folder or let it autodismiss after 2.8 seconds.</div>
-        <ul class="card-features">
-          <li>Shows folder name and confidence percentage inline</li>
-          <li>High confidence: "Grok is 84% confident"</li>
-          <li>Low confidence: "AI suggested — tap to change folder"</li>
-          <li>Tapping navigates to Library instantly</li>
-          <li>Autodismiss after 2.8 seconds</li>
-          <li>Removal variant: "Removed from [Folder]"</li>
-          <li>Trust score increases +2 on every accepted save</li>
-        </ul>
-        <span class="card-cta">Zero-click core moment</span>
-      </div>
-    </div>
+  <div class="section">
+    <h2>Query / Intent</h2>
+    <p>
+      The user describes what they remember in natural language, such as keywords, topics, or partial context, instead of exact matches.
+    </p>
   </div>
-</div>
 
-<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-
-<!-- D -->
-<div class="phase pc">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">D</span>Library Screen</div></div>
-  <div class="grid g2">
-    <div class="card cat">
-      <div class="card-num">6</div>
-      <div class="card-tag">Core screen</div>
-      <div class="card-title">Library screen</div>
-      <div class="card-desc">The organized knowledge library. State loaded from localStorage on mount. Every saved tweet sorted into folders with counts.</div>
-      <ul class="card-features">
-        <li>All tab with total bookmark count badge</li>
-        <li>Folder chips sorted by most recently used</li>
-        <li>Each chip shows tweet count badge</li>
-        <li>Active chip has inline pencil icon for instant rename</li>
-        <li>Semantic search across content, author, and handle</li>
-        <li>Folder chips stay visible during search</li>
-        <li>Tweets sorted by bookmarkedAt descending</li>
-        <li>Reset button: clears localStorage and reloads for demos</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-num">7</div>
-      <div class="card-tag">Folder management</div>
-      <div class="card-title">Long press or pencil to manage</div>
-      <div class="card-desc">Long pressing any folder chip for 650ms opens an action sheet. Pencil icon on active chip opens rename directly.</div>
-      <ul class="card-features">
-        <li>Rename: validates for empty name and duplicates</li>
-        <li>Delete: confirmation step with destructive warning</li>
-        <li>Delete removes all tweets in the folder</li>
-        <li>Auto-navigate away if active folder is deleted</li>
-        <li>All changes persist to localStorage immediately</li>
-        <li>onPointerCancel prevents stuck long press on mobile</li>
-      </ul>
-    </div>
+  <div class="section">
+    <h2>Processing</h2>
+    <p>
+      The system interprets the query, matches it against previously seen content using semantic understanding, and retrieves relevant results.
+    </p>
   </div>
-</div>
 
-<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-
-<!-- E -->
-<div class="phase pd">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">E</span>Action Paths in Library</div></div>
-  <div class="decision-wrap" style="margin-bottom:16px">
-    <div class="decision">
-      <div class="decision-label">User action in Library</div>
-      <div class="decision-q">What does the user do next?</div>
-      <div class="decision-branches">
-        <span class="branch br-a">Search</span>
-        <span class="branch br-b">Tap tweet menu</span>
-        <span class="branch br-c">Long press chip</span>
-        <span class="branch br-d">Tap bookmark icon</span>
-      </div>
-    </div>
+  <div class="section">
+    <h2>Results</h2>
+    <p>
+      The user is shown a ranked list of relevant past content, allowing them to quickly identify and access what they were looking for.
+    </p>
   </div>
-  <div class="grid g3">
-    <div class="card">
-      <div class="card-num">8</div>
-      <div class="card-tag">Search path</div>
-      <div class="card-title">Semantic search</div>
-      <div class="card-desc">Typing filters across all bookmarks simultaneously regardless of active folder.</div>
-      <ul class="card-features">
-        <li>Filters on content, author name, and handle</li>
-        <li>Cross-folder — all bookmarks at once</li>
-        <li>Folder chips stay visible during search</li>
-        <li>No-results state with suggestion copy</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-num">9</div>
-      <div class="card-tag">Tweet menu path</div>
-      <div class="card-title">Tweet action sheet</div>
-      <div class="card-desc">Three-dot menu opens a bottom sheet: move the tweet or ask why the AI filed it here.</div>
-      <ul class="card-features">
-        <li>Move to another folder — shows all folders with counts</li>
-        <li>Why was this saved here — AI explanation sheet</li>
-        <li>Spring animation on open and close</li>
-        <li>Single ActiveSheet union type — no invalid states</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-num">10</div>
-      <div class="card-tag">Remove path</div>
-      <div class="card-title">Remove bookmark</div>
-      <div class="card-desc">Tapping the filled bookmark icon removes the tweet. Auto-deletes the folder if it was the last tweet.</div>
-      <ul class="card-features">
-        <li>Dispatch REMOVE action to reducer</li>
-        <li>Trust score increases by 2</li>
-        <li>Auto-delete empty folder after removal</li>
-        <li>Persist updated store to localStorage</li>
-      </ul>
-    </div>
-  </div>
-</div>
 
-<div class="psep"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-
-<!-- F -->
-<div class="phase pe">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">F</span>Correction Loop</div></div>
-  <div class="grid">
-    <div class="grid g2">
-      <div class="card cac">
-        <div class="card-num">11</div>
-        <div class="card-tag">Move flow</div>
-        <div class="card-title">Move to a different folder</div>
-        <div class="card-desc">User moves a tweet to a different folder than the AI chose. Correction is logged, keyword pattern stored, trust score adjusted.</div>
-        <ul class="card-features">
-          <li>Bottom sheet lists all other folders with counts</li>
-          <li>Dispatch MOVE: fromId to toId</li>
-          <li>autoAssigned set to false on the tweet</li>
-          <li>CorrectionRecord written with keyword and timestamp</li>
-          <li>Trust score decreases by 4</li>
-          <li>Persisted to xrecall_corrections in localStorage</li>
-          <li>Toast: "Moved to [Folder]"</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-num">12</div>
-        <div class="card-tag">Explanation flow</div>
-        <div class="card-title">AI explanation sheet</div>
-        <div class="card-desc">Full transparency into why the AI filed a tweet here. Shows the reasoning, confidence, and how to teach it.</div>
-        <ul class="card-features">
-          <li>Category name and matched keywords displayed</li>
-          <li>Animated confidence bar with percentage</li>
-          <li>Current trust score shown</li>
-          <li>Prompt: move the tweet and Grok learns</li>
-          <li>Got it CTA closes and returns to Library</li>
-        </ul>
-      </div>
-    </div>
-    <div class="psep" style="height:20px"><div class="conn-line"></div><div class="conn-arrow"></div></div>
-    <div class="grid g1">
-      <div class="card cac">
-        <div class="card-num">13</div>
-        <div class="card-tag">Learning system</div>
-        <div class="card-title">Correction history closes the loop — persisted across sessions</div>
-        <div class="card-desc">Every correction is written to localStorage. On next app load, the AI has full memory of your preferences and classifies similar tweets correctly from the first attempt.</div>
-        <ul class="card-features">
-          <li>Correction history is the highest priority signal in the inference engine</li>
-          <li>Matched keyword routes to corrected category at confidence 0.88 to 0.98</li>
-          <li>Trust score rises with accepted saves (+2) and falls with corrections (-4)</li>
-          <li>Persisted to xrecall_corrections — survives page refresh</li>
-          <li>System converges toward accurate classification over time</li>
-        </ul>
-        <span class="card-cta">Live feedback loop — persisted</span>
-      </div>
-    </div>
+  <div class="section">
+    <h2>Feedback Loop</h2>
+    <p>
+      The system improves over time by learning from user interactions, such as clicks or refinements, enhancing future recall accuracy.
+    </p>
   </div>
-</div>
 
-<div class="legend">
-  <div class="legend-title">Phase legend</div>
-  <div class="legend-grid">
-    <div class="legend-item"><div class="legend-dot" style="background:#1D9BF0"></div>A–B — Initialization and entry</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>C — Bookmark and AI classification</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>D — Library screen</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#854F0B"></div>E — Action paths</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#993C1D"></div>F — Correction loop</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#d0d0c8"></div>Decision point</div>
-  </div>
-</div>
-</div>
 </body>
 </html>
