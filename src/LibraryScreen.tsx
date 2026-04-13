@@ -210,6 +210,12 @@ export function LibraryScreen({
           <ArrowLeft className="w-6 h-6 text-white hover:text-[#1D9BF0] transition-colors" />
         </button>
         <span className="text-white text-xl font-bold">Bookmarks</span>
+<button
+  onClick={() => { localStorage.clear(); window.location.reload(); }}
+  className="absolute right-4 text-[10px] text-zinc-600 hover:text-zinc-400 transition-colors font-medium"
+>
+  Reset
+</button>
       </div>
 
       {/* Search */}
