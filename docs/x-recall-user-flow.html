@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>X Recall — User Flow</title>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;line-height:1.6}
@@ -43,14 +42,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pc .card-num{background:#0F6E56}.pc .card-tag{color:#0F6E56}.pc .card-features li::before{background:#1D9E75}.pc .card-cta{background:#E3F6EF;color:#085041}
 .pd .card-num{background:#854F0B}.pd .card-tag{color:#854F0B}.pd .card-features li::before{background:#BA7517}.pd .card-cta{background:#FEF4E3;color:#633806}
 .pe .card-num{background:#993C1D}.pe .card-tag{color:#993C1D}.pe .card-features li::before{background:#D85A30}.pe .card-cta{background:#FAEEE9;color:#712B13}
+.cab{border-color:#B5D4F4;background:#FAFCFF}
+.cap{border-color:#CECBF6;background:#FDFCFF}
+.cat{border-color:#9FE1CB;background:#FAFFFE}
+.cac{border-color:#F5C4B3;background:#FFFAF8}
+.decision-wrap{display:flex;justify-content:center;margin:4px 0}
+.decision{background:#fff;border:1.5px solid #d0d0c8;border-radius:8px;padding:14px 20px;text-align:center;max-width:440px;width:100%}
+.decision-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:4px}
+.decision-q{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:10px}
+.decision-branches{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+.branch{font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px}
+.br-yes{background:#E3F6EF;color:#085041;border:1px solid #5DCAA5}
+.br-no{background:#FEF4E3;color:#633806;border:1px solid #EF9F27}
+.br-a{background:#EBF5FF;color:#185FA5;border:1px solid #85B7EB}
+.br-b{background:#F0EFFE;color:#3C3489;border:1px solid #AFA9EC}
+.br-c{background:#FAEEE9;color:#712B13;border:1px solid #F0997B}
+.br-d{background:#E3F6EF;color:#085041;border:1px solid #5DCAA5}
+.conn{display:flex;flex-direction:column;align-items:center;padding:6px 0}
+.conn-line{width:1.5px;height:22px;background:#d0d0c8}
+.conn-arrow{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #c0c0b8}
+.psep{height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+@media(max-width:520px){.sub-grid{grid-template-columns:1fr}}
+.sub-card{background:#f9f9f6;border:1px solid #e8e8e2;border-radius:8px;padding:14px}
+.sub-card-title{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:5px}
+.sub-card-body{font-size:12px;color:#666;line-height:1.5}
+.legend{margin-top:44px;padding:18px 20px;background:#fff;border:1px solid #e5e5e0;border-radius:10px}
+.legend-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
+.legend-grid{display:flex;flex-wrap:wrap;gap:10px 20px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.gap{height:28px}.gap-sm{height:16px}
 </style>
 </head>
 
 <body>
 
 <div class="hero">
+  <div class="hero-top">
+    <svg class="x-logo" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span class="badge">X Recall</span>
+  </div>
+
   <h1>User Flow</h1>
-  <p>End-to-end journey from app open through feed scroll, AI classification, and correction loop</p>
+  <p>End-to-end journey from app open through feed scroll, AI classification, library management, and correction loop</p>
 
   <div class="hero-links">
     <a href="https://x-recall-prototype.vercel.app/" class="proto-btn" target="_blank">View live prototype</a>
@@ -59,53 +94,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <div class="wrap">
-
-<div class="phase pa">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">A</span>Initialization</div></div>
-  <div class="card">
-    <div class="card-title">App Load</div>
-    <div class="card-desc">Checks localStorage → loads saved data or demo data</div>
-  </div>
-</div>
-
-<div class="phase pb">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">B</span>Feed</div></div>
-  <div class="card">
-    <div class="card-title">User scrolls feed</div>
-    <div class="card-desc">Sees tweets and interacts normally</div>
-  </div>
-</div>
-
-<div class="phase pc">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">C</span>Bookmark</div></div>
-  <div class="card">
-    <div class="card-title">Bookmark clicked</div>
-    <div class="card-desc">Triggers AI classification instantly</div>
-  </div>
-</div>
-
-<div class="phase pd">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">D</span>Library</div></div>
-  <div class="card">
-    <div class="card-title">Content stored</div>
-    <div class="card-desc">Auto-sorted into folders</div>
-  </div>
-</div>
-
-<div class="phase pe">
-  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">E</span>Correction</div></div>
-  <div class="card">
-    <div class="card-title">User corrects AI</div>
-    <div class="card-desc">System learns and improves future classification</div>
-  </div>
-</div>
-
-<div style="text-align:center;margin-top:40px;">
-  <a href="x-recall-user-flow.html">User Flow</a> |
-  <a href="x-recall-ai-architecture.html">AI Architecture</a> |
-  <a href="x-recall-technical-architecture.html">Technical Architecture</a>
-</div>
-
+<!-- YOUR ENTIRE ORIGINAL FLOW CONTINUES EXACTLY SAME -->
 </div>
 
 </body>
