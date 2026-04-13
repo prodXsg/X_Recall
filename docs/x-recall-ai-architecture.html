@@ -1,132 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X Recall - AI Architecture</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Architecture</title>
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f8fafc;
-      margin: 0;
-      padding: 40px;
-      color: #111;
-      text-align: center;
-    }
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f8fafc; margin:0; padding:40px; text-align:center; }
+h1 { font-size:40px; }
+p { color:#555; max-width:700px; margin:auto; }
 
-    .badge {
-      display: inline-block;
-      background: #1da1f2;
-      color: white;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 10px;
-    }
+.btn { padding:12px 20px; border-radius:25px; text-decoration:none; margin:10px; display:inline-block; }
+.primary { background:black; color:white; }
+.secondary { border:1px solid #ccc; color:black; }
 
-    h1 {
-      font-size: 42px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
+.section { background:white; padding:25px; margin:30px auto; max-width:800px; border-radius:10px; text-align:left; }
 
-    p {
-      color: #555;
-      font-size: 18px;
-      max-width: 700px;
-      margin: 0 auto 30px;
-      line-height: 1.6;
-    }
-
-    .buttons {
-      margin-bottom: 40px;
-    }
-
-    .primary-btn {
-      display: inline-block;
-      background: black;
-      color: white;
-      padding: 14px 24px;
-      border-radius: 30px;
-      text-decoration: none;
-      margin-right: 10px;
-    }
-
-    .secondary-btn {
-      display: inline-block;
-      border: 1px solid #ccc;
-      padding: 14px 24px;
-      border-radius: 30px;
-      text-decoration: none;
-      color: black;
-    }
-
-    .section {
-      max-width: 900px;
-      margin: 40px auto;
-      text-align: left;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      border: 1px solid #eee;
-    }
-
-    .section h2 {
-      margin-bottom: 10px;
-    }
-
-    .section p {
-      margin: 0;
-      color: #444;
-    }
-  </style>
+.nav { margin-top:40px; }
+.nav a { margin:0 10px; text-decoration:none; color:#0077cc; }
+</style>
 </head>
 
 <body>
 
-  <div>
-    <span style="font-size:28px;">X</span>
-    <span class="badge">X RECALL</span>
-  </div>
+<h1>AI Architecture</h1>
 
-  <h1>AI Architecture</h1>
+<p>System that classifies, embeds, and retrieves user-seen content.</p>
 
-  <p>
-    X Recall uses lightweight AI pipelines to classify, embed, and retrieve user-consumed content in real time, enabling contextual recall without disrupting feed behavior.
-  </p>
+<a href="https://x-recall-prototype.vercel.app/" class="btn primary" target="_blank">
+View live prototype
+</a>
 
-  <div class="buttons">
-    <a href="https://x-recall-prototype-9v6n8zrnk-surya7824-4336s-projects.vercel.app/" class="primary-btn" target="_blank">
-      View live prototype
-    </a>
+<a href="https://github.com/prodXsg/X_Recall_prototype" class="btn secondary" target="_blank">
+GitHub repo
+</a>
 
-    <a href="https://github.com/prodXsg/X_Recall_prototype" class="secondary-btn" target="_blank">
-      GitHub repo
-    </a>
-  </div>
+<div class="section">
+<h2>Classification</h2>
+<p>Content is categorized into topics using lightweight models.</p>
+</div>
 
-  <div class="section">
-    <h2>Overview</h2>
-    <p>
-      The system captures user interactions such as scroll pauses, likes, and clicks, then processes content through classification and embedding models to create a structured memory layer.
-    </p>
-  </div>
+<div class="section">
+<h2>Embeddings</h2>
+<p>Semantic vectors allow meaning-based search.</p>
+</div>
 
-  <div class="section">
-    <h2>Core Components</h2>
-    <p>
-      A classification model categorizes content into topics, while embeddings enable semantic search. A retrieval layer matches user queries or intent with previously seen content.
-    </p>
-  </div>
+<div class="section">
+<h2>Retrieval</h2>
+<p>Relevant content is fetched based on similarity.</p>
+</div>
 
-  <div class="section">
-    <h2>Feedback Loop</h2>
-    <p>
-      User corrections improve model accuracy over time by reinforcing relevant classifications and reducing noise, creating a continuously improving recall system.
-    </p>
-  </div>
+<div class="nav">
+<a href="x-recall-user-flow.html">User Flow</a>
+<a href="x-recall-ai-architecture.html">AI Architecture</a>
+<a href="x-recall-technical-architecture.html">Technical Architecture</a>
+</div>
 
 </body>
 </html>
