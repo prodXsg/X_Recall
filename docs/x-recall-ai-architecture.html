@@ -1,60 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Architecture</title>
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>X Recall — AI Architecture</title>
 <style>
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#f8fafc; margin:0; padding:40px; text-align:center; }
-h1 { font-size:40px; }
-p { color:#555; max-width:700px; margin:auto; }
-
-.btn { padding:12px 20px; border-radius:25px; text-decoration:none; margin:10px; display:inline-block; }
-.primary { background:black; color:white; }
-.secondary { border:1px solid #ccc; color:black; }
-
-.section { background:white; padding:25px; margin:30px auto; max-width:800px; border-radius:10px; text-align:left; }
-
-.nav { margin-top:40px; }
-.nav a { margin:0 10px; text-decoration:none; color:#0077cc; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;line-height:1.6}
+.hero{background:#fff;border-bottom:1px solid #e5e5e0;padding:52px 32px 44px;text-align:center}
+.hero-top{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}
+.x-logo{width:24px;height:24px;fill:#000}
+.badge{background:#0F6E56;color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.hero h1{font-size:30px;font-weight:700;color:#0f0f0f;letter-spacing:-.5px;margin-bottom:8px}
+.hero p{font-size:14px;color:#555;max-width:520px;margin:0 auto 24px;line-height:1.6}
+.hero-links{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.proto-btn{display:inline-flex;align-items:center;gap:6px;background:#0F6E56;color:#fff;font-size:13px;font-weight:600;padding:9px 20px;border-radius:22px;text-decoration:none}
+.sec-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#1a1a1a;font-size:13px;font-weight:600;padding:8px 18px;border-radius:22px;text-decoration:none;border:1px solid #d0d0c8}
+.wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid #e8e8e2}
+.phase-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.phase-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.phase-letter{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+.pg .phase-pill{background:#E3F6EF;color:#085041}.pg .phase-letter{background:#0F6E56;color:#fff}
+.pf .phase-pill{background:#F0EFFE;color:#26215C}.pf .phase-letter{background:#7F77DD;color:#fff}
+.ph .phase-pill{background:#EBF5FF;color:#185FA5}.ph .phase-letter{background:#1D9BF0;color:#fff}
+.pp .phase-pill{background:#FAEEE9;color:#712B13}.pp .phase-letter{background:#993C1D;color:#fff}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g1{grid-template-columns:1fr}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e5e5e0;border-radius:10px;padding:18px 18px 16px;position:relative}
+.card-num{position:absolute;top:-11px;left:16px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2px solid #f5f5f0;color:#fff}
+.card-tag{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;margin-top:2px}
+.card-title{font-size:14px;font-weight:700;color:#0f0f0f;margin-bottom:5px;line-height:1.4}
+.card-desc{font-size:12px;color:#666;margin-bottom:12px;line-height:1.55}
+.card-features{list-style:none;display:flex;flex-direction:column;gap:5px}
+.card-features li{font-size:12px;color:#444;display:flex;gap:7px;align-items:flex-start;line-height:1.45}
+.card-features li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px;background:#1D9E75}
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.sub-grid{grid-template-columns:1fr}}
+.sub-card{background:#f9f9f6;border:1px solid #e8e8e2;border-radius:8px;padding:14px}
+.sub-card-title{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:5px}
+.sub-card-body{font-size:12px;color:#666;line-height:1.5}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:640px){.signal-grid{grid-template-columns:1fr}}
+.signal-card{border-radius:10px;padding:18px;border:1px solid}
+.sig-1{background:#F0EFFE;border-color:#CECBF6}
+.sig-2{background:#EBF5FF;border-color:#B5D4F4}
+.sig-3{background:#E3F6EF;border-color:#9FE1CB}
+.sig-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;margin-bottom:10px}
+.sig-1 .sig-num{background:#534AB7}
+.sig-2 .sig-num{background:#1D9BF0}
+.sig-3 .sig-num{background:#0F6E56}
+.sig-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.sig-1 .sig-label{color:#3C3489}
+.sig-2 .sig-label{color:#185FA5}
+.sig-3 .sig-label{color:#085041}
+.sig-title{font-size:14px;font-weight:700;color:#0f0f0f;margin-bottom:6px}
+.sig-body{font-size:12px;color:#555;line-height:1.55;margin-bottom:10px}
+.sig-detail{font-size:11px;color:#777;line-height:1.5;margin-bottom:10px}
+.conf-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
+.sig-1 .conf-badge{background:#534AB7;color:#fff}
+.sig-2 .conf-badge{background:#1D9BF0;color:#fff}
+.sig-3 .conf-badge{background:#0F6E56;color:#fff}
+.conf-row{display:flex;align-items:center;gap:10px;background:#f9f9f6;border:1px solid #e8e8e2;border-radius:8px;padding:12px 14px;margin-top:6px}
+.conf-label{font-size:11px;font-weight:700;color:#555;min-width:200px}
+.conf-bar-wrap{flex:1;background:#e8e8e2;border-radius:4px;height:8px;overflow:hidden}
+.conf-bar{height:100%;border-radius:4px}
+.conf-value{font-size:11px;font-weight:700;color:#1a1a1a;min-width:45px;text-align:right}
+.flow-row{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f9f9f6;border:1px solid #e8e8e2;border-radius:8px;margin-top:6px}
+.flow-step{font-size:11px;color:#666;flex:1;line-height:1.4}
+.flow-arrow{color:#aaa;font-size:14px;flex-shrink:0}
+.kw-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media(max-width:640px){.kw-grid{grid-template-columns:1fr}}
+.kw-card{background:#f9f9f6;border:1px solid #e8e8e2;border-radius:8px;padding:12px}
+.kw-title{font-size:11px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.kw-count{display:inline-block;font-size:10px;font-weight:700;color:#0F6E56;background:#E3F6EF;padding:1px 7px;border-radius:8px;margin-bottom:6px}
+.kw-body{font-size:11px;color:#666;line-height:1.5}
+.trust-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:640px){.trust-grid{grid-template-columns:1fr}}
+.trust-card{border-radius:10px;padding:16px;border:1px solid;text-align:center}
+.trust-green{background:#E3F6EF;border-color:#9FE1CB}
+.trust-red{background:#FAEEE9;border-color:#F5C4B3}
+.trust-gray{background:#f1efe8;border-color:#D3D1C7}
+.trust-num{font-size:28px;font-weight:700;margin-bottom:4px}
+.trust-green .trust-num{color:#0F6E56}
+.trust-red .trust-num{color:#993C1D}
+.trust-gray .trust-num{color:#5F5E5A}
+.trust-label{font-size:11px;font-weight:700;margin-bottom:4px}
+.trust-green .trust-label{color:#085041}
+.trust-red .trust-label{color:#712B13}
+.trust-gray .trust-label{color:#444441}
+.trust-desc{font-size:11px;color:#666;line-height:1.5}
+.divider{margin:36px 0;border:none;border-top:2px dashed #e0e0d8}
+.legend{margin-top:44px;padding:18px 20px;background:#fff;border:1px solid #e5e5e0;border-radius:10px}
+.legend-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
+.legend-grid{display:flex;flex-wrap:wrap;gap:10px 20px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.gap{height:28px}.gap-sm{height:14px}
 </style>
 </head>
-
 <body>
+<div class="hero">
+  <div class="hero-top">
+    <svg class="x-logo" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span class="badge">AI Architecture</span>
+  </div>
+  <h1>AI Classification Architecture</h1>
+  <p>Three-signal inference engine, confidence scoring formula, keyword dictionary, trust score system, and correction learning loop</p>
+  <div class="hero-links">
+  <a href="https://x-recall-prototype.vercel.app/" class="proto-btn" target="_blank">
+    View live prototype
+  </a>
+  <a href="https://github.com/prodXsg/X_Recall_prototype" class="sec-btn" target="_blank">
+    GitHub repo
+  </a>
+</div>
+</div>
+<div class="wrap">
 
-<h1>AI Architecture</h1>
+<div class="section-label">Part 1 — Three-Signal Inference Engine</div>
 
-<p>System that classifies, embeds, and retrieves user-seen content.</p>
-
-<a href="https://x-recall-prototype.vercel.app/" class="btn primary" target="_blank">
-View live prototype
-</a>
-
-<a href="https://github.com/prodXsg/X_Recall_prototype" class="btn secondary" target="_blank">
-GitHub repo
-</a>
-
-<div class="section">
-<h2>Classification</h2>
-<p>Content is categorized into topics using lightweight models.</p>
+<div class="phase pg">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">A</span>Signal Priority Order</div></div>
+  <div class="signal-grid">
+    <div class="signal-card sig-1">
+      <div class="sig-num">1</div>
+      <div class="sig-label">Highest priority</div>
+      <div class="sig-title">Correction Learning</div>
+      <div class="sig-body">Checks correctionHistory array first. If tweet content contains a previously corrected keyword pattern, the learned category is returned immediately. Signals 2 and 3 are skipped entirely.</div>
+      <div class="sig-detail">Source: xrecall_corrections in localStorage. Persists across sessions. Pattern extracted from first matched keyword or first 3 words of tweet content.</div>
+      <span class="conf-badge">Confidence: 0.88 to 0.98</span>
+    </div>
+    <div class="signal-card sig-2">
+      <div class="sig-num">2</div>
+      <div class="sig-label">Secondary signal</div>
+      <div class="sig-title">Semantic Analysis</div>
+      <div class="sig-body">Keyword dictionary lookup across 12 categories and 100+ domain-specific terms. Matches on full tweet content AND author name simultaneously.</div>
+      <div class="sig-detail">Existing user folders checked first (Pass 1). Only attempts new category creation if no existing folder matches (Pass 2). Best match wins — highest keyword count.</div>
+      <span class="conf-badge">Confidence: 0.52 to 0.87</span>
+    </div>
+    <div class="signal-card sig-3">
+      <div class="sig-num">3</div>
+      <div class="sig-label">Supporting signal</div>
+      <div class="sig-title">Author Authority</div>
+      <div class="sig-body">Bayesian prior from account name. ESPN = high probability of Sports. BBCNews = high probability of News. Contributes to final match score alongside semantic keywords.</div>
+      <div class="sig-detail">Overridden by semantic analysis when the semantic signal is strong. Not a standalone signal — works in combination with Signal 2 keyword matching.</div>
+      <span class="conf-badge">Confidence: 0.52 to 0.87</span>
+    </div>
+  </div>
 </div>
 
-<div class="section">
-<h2>Embeddings</h2>
-<p>Semantic vectors allow meaning-based search.</p>
+<div class="gap"></div>
+
+<div class="section-label">Part 2 — Confidence Scoring Formula</div>
+
+<div class="phase pf">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">B</span>How the final score is computed</div></div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">Scoring components — standard classification path</div>
+      <div class="gap-sm"></div>
+      <div class="conf-row">
+        <div class="conf-label">Base score (always present)</div>
+        <div class="conf-bar-wrap"><div class="conf-bar" style="width:52%;background:#1D9BF0"></div></div>
+        <div class="conf-value">0.52</div>
+      </div>
+      <div class="conf-row">
+        <div class="conf-label">Keyword boost (matchCount x 0.12, max 0.35)</div>
+        <div class="conf-bar-wrap"><div class="conf-bar" style="width:35%;background:#7F77DD"></div></div>
+        <div class="conf-value">+ 0.35</div>
+      </div>
+      <div class="conf-row">
+        <div class="conf-label">Trust bonus (trustScore / 100 x 0.06)</div>
+        <div class="conf-bar-wrap"><div class="conf-bar" style="width:6%;background:#1D9E75"></div></div>
+        <div class="conf-value">+ 0.06</div>
+      </div>
+      <div class="conf-row" style="background:#EBF5FF;border-color:#B5D4F4;margin-top:10px">
+        <div class="conf-label" style="color:#185FA5;font-weight:700">Standard classification ceiling</div>
+        <div class="conf-bar-wrap"><div class="conf-bar" style="width:96%;background:#1D9BF0"></div></div>
+        <div class="conf-value" style="color:#185FA5;font-weight:700">0.96</div>
+      </div>
+      <div class="conf-row" style="background:#F0EFFE;border-color:#CECBF6">
+        <div class="conf-label" style="color:#3C3489;font-weight:700">Learned correction ceiling</div>
+        <div class="conf-bar-wrap"><div class="conf-bar" style="width:98%;background:#534AB7"></div></div>
+        <div class="conf-value" style="color:#3C3489;font-weight:700">0.98</div>
+      </div>
+      <div class="conf-row" style="background:#f9f9f6;border-color:#e8e8e2">
+        <div class="conf-label" style="color:#993C1D;font-weight:700">Fallback — no keyword match found</div>
+        <div class="conf-bar-wrap"><div class="conf-bar" style="width:38%;background:#D85A30"></div></div>
+        <div class="conf-value" style="color:#993C1D;font-weight:700">0.38</div>
+      </div>
+    </div>
+    <div class="gap-sm"></div>
+    <div class="card">
+      <div class="card-title">Classification routing after score is computed</div>
+      <div class="gap-sm"></div>
+      <div class="flow-row"><div class="flow-step"><strong>Score 0.75 or above</strong> — Auto-file to matched folder. Create folder if it does not exist. Bubble to top of chip list.</div></div>
+      <div class="flow-row"><div class="flow-step"><strong>Score below 0.75</strong> — Route to Unsorted inbox. User reviews and moves manually. Moving trains the model.</div></div>
+      <div class="flow-row"><div class="flow-step"><strong>Score 0.38</strong> — Fallback. No keyword matched. Uses tweet.category field from the data. Likely to land in Unsorted.</div></div>
+      <div class="flow-row" style="background:#EBF5FF;border-color:#B5D4F4"><div class="flow-step" style="color:#185FA5"><strong>Learned correction match</strong> — Bypass all scoring. Return corrected category at 0.88 to 0.98 confidence immediately.</div></div>
+    </div>
+  </div>
 </div>
 
-<div class="section">
-<h2>Retrieval</h2>
-<p>Relevant content is fetched based on similarity.</p>
+<div class="gap"></div>
+
+<div class="section-label">Part 3 — Keyword Dictionary</div>
+
+<div class="phase pg">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">C</span>12 categories, 100+ keywords</div></div>
+  <div class="kw-grid">
+    <div class="kw-card"><div class="kw-title">Dev Resources</div><div class="kw-count">24 keywords</div><div class="kw-body">python · javascript · react · typescript · docker · kubernetes · graphql · jwt · lambda · serverless · mongodb · owasp · microservice · deno · node · debugging · sql · api · code · programming · dev · github · cypress · database</div></div>
+    <div class="kw-card"><div class="kw-title">Crypto</div><div class="kw-count">17 keywords</div><div class="kw-body">bitcoin · ethereum · crypto · blockchain · defi · nft · web3 · solana · token · dao · coinbase · staking · ath · bull run · layer 2 · rollup · smart contract</div></div>
+    <div class="kw-card"><div class="kw-title">Design</div><div class="kw-count">16 keywords</div><div class="kw-body">design · ui · ux · figma · color · typography · animation · branding · icon · micro-interaction · prototype · wireframe · conversion · user testing · neumorphism · dark mode</div></div>
+    <div class="kw-card"><div class="kw-title">Automobiles</div><div class="kw-count">20 keywords</div><div class="kw-body">car · auto · vehicle · electric · ev · tesla · bmw · mercedes · porsche · engine · mustang · model s · plaid · gt3 · aero · adas · hybrid · lucid · mclaren · le mans</div></div>
+    <div class="kw-card"><div class="kw-title">Sports</div><div class="kw-count">15 keywords</div><div class="kw-body">game · sport · basketball · football · soccer · championship · nfl · nba · player · team · espn · catch · overtime · season · marathon · training</div></div>
+    <div class="kw-card"><div class="kw-title">Cooking</div><div class="kw-count">13 keywords</div><div class="kw-body">recipe · chef · cook · food · pasta · dinner · ingredient · kitchen · meal · ramsay · scrambled eggs · shrimp · flavor</div></div>
+    <div class="kw-card"><div class="kw-title">News</div><div class="kw-count">8 keywords</div><div class="kw-body">breaking · summit · bbc · reuters · climate · global · announce · agreement</div></div>
+    <div class="kw-card"><div class="kw-title">Fitness</div><div class="kw-count">8 keywords</div><div class="kw-body">workout · exercise · fitness · core strength · yoga · training · gym · morning workout</div></div>
+    <div class="kw-card"><div class="kw-title">Health</div><div class="kw-count">7 keywords</div><div class="kw-body">sleep · wellness · health · mediterranean diet · doctor · nutrition · diet</div></div>
+    <div class="kw-card"><div class="kw-title">Entertainment</div><div class="kw-count">8 keywords</div><div class="kw-body">movie · netflix · film · series · trailer · dune · watched · binge</div></div>
+    <div class="kw-card"><div class="kw-title">Technology</div><div class="kw-count">12 keywords</div><div class="kw-body">tech · apple · chip · neural · ai · vr · headset · meta · verge · quantum · m4 · processor</div></div>
+    <div class="kw-card"><div class="kw-title">Real Estate</div><div class="kw-count">6 keywords</div><div class="kw-body">home · house · zillow · property · real estate · listing</div></div>
+  </div>
 </div>
 
-<div class="nav">
-<a href="x-recall-user-flow.html">User Flow</a>
-<a href="x-recall-ai-architecture.html">AI Architecture</a>
-<a href="x-recall-technical-architecture.html">Technical Architecture</a>
+<div class="gap"></div>
+
+<div class="section-label">Part 4 — Trust Score System</div>
+
+<div class="phase ph">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">D</span>Dynamic trust score</div></div>
+  <div class="grid">
+    <div class="trust-grid">
+      <div class="trust-card trust-green">
+        <div class="trust-num">+2</div>
+        <div class="trust-label">Reward</div>
+        <div class="trust-desc">Every accepted save where the user does not move the tweet. Every bookmark removal from Library. Max cap: 100.</div>
+      </div>
+      <div class="trust-card trust-red">
+        <div class="trust-num">-4</div>
+        <div class="trust-label">Penalty</div>
+        <div class="trust-desc">Every manual folder move — the AI was wrong. Penalty is larger than reward to bias the system toward accuracy. Min floor: 0.</div>
+      </div>
+      <div class="trust-card trust-gray">
+        <div class="trust-num">75</div>
+        <div class="trust-label">Starting value</div>
+        <div class="trust-desc">Every session starts at 75. Trust score lives in React state only — resets on reload. Corrections are persisted, trust score is not.</div>
+      </div>
+    </div>
+    <div class="gap-sm"></div>
+    <div class="sub-grid">
+      <div class="sub-card"><div class="sub-card-title">Effect on confidence ceiling</div><div class="sub-card-body">Trust bonus = trustScore / 100 x 0.06. A user at trust 100 gets +0.06. A user at trust 0 gets +0.00. The ceiling moves from 0.87 to 0.93 between worst and best trust. Threshold stays fixed at 0.75 regardless.</div></div>
+      <div class="sub-card"><div class="sub-card-title">Why corrections persist but trust does not</div><div class="sub-card-body">Correction history is the valuable signal — it contains the learned patterns. Trust score is a session-level quality indicator. Resetting trust to 75 on each session prevents stale penalty accumulation while keeping the learned vocabulary intact.</div></div>
+    </div>
+  </div>
 </div>
 
+<div class="gap"></div>
+
+<div class="section-label">Part 5 — Correction Learning Loop</div>
+
+<div class="phase pp">
+  <div class="phase-header"><div class="phase-pill"><span class="phase-letter">E</span>How the AI learns from user behavior</div></div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">Full correction loop — end to end</div>
+      <div class="gap-sm"></div>
+      <div class="flow-row"><div class="flow-step"><strong>Step 1:</strong> User bookmarks a tweet. Signal 2 classifies it as "Technology" based on keyword "ai".</div></div>
+      <div class="flow-row"><div class="flow-step"><strong>Step 2:</strong> User opens Library, taps the tweet menu, selects "Move to folder", picks "Dev Resources" instead.</div></div>
+      <div class="flow-row"><div class="flow-step"><strong>Step 3:</strong> CorrectionRecord is written: tweetId · oldCategory "Technology" · newCategory "Dev Resources" · keywordPattern "ai" · timestamp.</div></div>
+      <div class="flow-row"><div class="flow-step"><strong>Step 4:</strong> Trust score drops by 4. Correction record persisted to xrecall_corrections in localStorage.</div></div>
+      <div class="flow-row"><div class="flow-step"><strong>Step 5:</strong> User bookmarks another tweet containing "ai". Inference engine checks correctionHistory first. Finds "ai" pattern. Returns "Dev Resources" at confidence 0.88 to 0.98. Skips semantic and author signals entirely.</div></div>
+      <div class="flow-row" style="background:#E3F6EF;border-color:#9FE1CB"><div class="flow-step" style="color:#085041"><strong>Result:</strong> The AI now correctly categorizes "ai" tweets into Dev Resources instead of Technology — permanently, across sessions.</div></div>
+    </div>
+    <div class="gap-sm"></div>
+    <div class="sub-grid">
+      <div class="sub-card"><div class="sub-card-title">keywordPattern extraction logic</div><div class="sub-card-body">First choice: the first matched keyword from bookmarkMeta.matchedKeywords. Fallback: first 3 words of tweet content joined as a string. This ensures even tweets with no keyword match have a learnable pattern stored.</div></div>
+      <div class="sub-card"><div class="sub-card-title">Persistence across sessions</div><div class="sub-card-body">correctionHistory is written to xrecall_corrections on every move. On next app load, useState lazy initializer reads it back from localStorage. The AI has full memory of every correction the user has ever made.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-title">Section legend</div>
+  <div class="legend-grid">
+    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>A — Three-signal inference engine</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div>B — Confidence scoring formula</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>C — Keyword dictionary</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9BF0"></div>D — Trust score system</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#993C1D"></div>E — Correction learning loop</div>
+  </div>
+</div>
+</div>
 </body>
 </html>
