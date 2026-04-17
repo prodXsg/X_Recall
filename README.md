@@ -105,5 +105,3 @@ bookmarking. This work bridges PM thinking and functional
 prototyping, from identifying the AI opportunity to a working
 coded implementation.
 
-[LinkedIn](https://linkedin.com/in/your-profile)
-[GitHub](https://github.com/prodXsg)
