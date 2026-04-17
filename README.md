@@ -10,7 +10,7 @@ tweet into a smart folder at the moment of save, using a three-signal
 AI inference engine. Zero clicks required from the user. Zero
 interruption to the scroll flow.
 
-**[View Live Prototype](https://your-vercel-link.vercel.app)**
+**[View Live Prototype](https://x-recall-prototype.vercel.app/)**
 
 ---
 
