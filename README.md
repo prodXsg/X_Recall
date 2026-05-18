@@ -68,9 +68,9 @@ the model and adjusts a live trust score.
 
 ## Documentation
 
-[User Flow](https://prodxsg.github.io/X_Recall_prototype/x-recall-user-flow.html)
-[AI Architecture](https://prodxsg.github.io/X_Recall_prototype/x-recall-ai-architecture.html)
-[Technical Architecture](https://prodxsg.github.io/X_Recall_prototype/x-recall-technical-architecture.html)
+[User Flow](https://prodxsg.github.io/X_Recall/x-recall-user-flow.html)
+[AI Architecture](https://prodxsg.github.io/X_Recall/x-recall-ai-architecture.html)
+[Technical Architecture](https://prodxsg.github.io/X_Recall/x-recall-technical-architecture.html)
 
 ## Architecture Highlights
 
