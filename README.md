@@ -1,14 +1,8 @@
  # X Recall — AI-Powered Bookmark Organization for X
 
-A working React prototype that solves one of X's most overlooked
-product failures: users save content with intent but almost never
-retrieve it. X bookmarks are a flat, chronological list with no
-structure. A junk drawer that makes retrieval nearly impossible.
+A working React prototype that solves one of X's most overlooked product failures: users save content with intent but almost never retrieve it. X bookmarks are a flat, chronological list with no structure. A junk drawer that makes retrieval nearly impossible.
 
-X Recall fixes this by automatically classifying every bookmarked
-tweet into a smart folder at the moment of save, using a three-signal
-AI inference engine. Zero clicks required from the user. Zero
-interruption to the scroll flow.
+X Recall fixes this by automatically classifying every bookmarked tweet into a smart folder at the moment of save, using a three-signal AI inference engine. Zero clicks required from the user. Zero interruption to the scroll flow
 
 **[View Live Prototype](https://x-recall-prototype.vercel.app/)**
 
@@ -64,7 +58,7 @@ the model and adjusts a live trust score.
 3. Toast confirms: "Saved to Dev Resources, Grok is 84% confident"
 4. Tweet lands in the correct folder in Library, zero user input
 5. If wrong, user moves it manually and AI learns and corrects itself
-6. On next similar tweet, learned category is applied at 0.88 to 0.98 confidence
+6. On next similar tweet, learned category is applied at high confidence
 
 ## Documentation
 
@@ -86,7 +80,7 @@ the model and adjusts a live trust score.
 
 ## Tech Stack
 
-React, TypeScript, Vite, Tailwind CSS, Framer Motion
+React, TypeScript, Vite, Tailwind CSS, Framer Motion, Figma
 
 ## Run Locally
 
@@ -94,14 +88,4 @@ React, TypeScript, Vite, Tailwind CSS, Framer Motion
 npm install
 npm run dev
 ```
-
-## Author
-
-Surya Gummalla
-
-Built to validate a product hypothesis: that AI classification at
-the moment of save eliminates the retrieval failure loop in social
-bookmarking. This work bridges PM thinking and functional
-prototyping, from identifying the AI opportunity to a working
-coded implementation.
 
