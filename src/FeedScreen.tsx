@@ -15,6 +15,7 @@ interface FeedScreenProps {
   categories: Category[];
   bookmarksById: Record<number, Tweet>;
   increaseUserTrustScore: () => void;
+  bookmarkSyncStatus?: Record<number, 'synced' | 'syncing' | 'conflict' | 'offline' | 'none'>;
 }
 
 // ─── Ads ──────────────────────────────────────────────────────────────────────
@@ -79,6 +80,7 @@ export function FeedScreen({
   getTweetCategory,
   categories,
   increaseUserTrustScore,
+  bookmarkSyncStatus = {},
 }: FeedScreenProps) {
   const [activeTab,       setActiveTab]       = useState<TabType>('for-you');
   const [toast,           setToast]           = useState<ToastState>({ visible: false, message: '', folderName: '', folderId: '', isAI: false, confidence: 1 });
@@ -252,6 +254,7 @@ export function FeedScreen({
                 onLikeClick={() => handleLike(tweet.id)}
                 onRetweetClick={() => handleRetweet(tweet.id)}
                 onMenuClick={tweet.isAd ? undefined : () => setFeedMenuTweetId(tweet.id)}
+                syncStatus={bookmarkSyncStatus[tweet.id] || 'none'}
               />
             ))}
 

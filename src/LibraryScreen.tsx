@@ -17,6 +17,7 @@ interface LibraryScreenProps {
   bookmarksById: Record<number, Tweet>;
   increaseUserTrustScore: () => void;
   userTrustScore: number;
+  bookmarkSyncStatus?: Record<number, 'synced' | 'syncing' | 'conflict' | 'offline' | 'none'>;
 }
 
 // ─── Active sheet union — one state instead of three booleans ─────────────────
@@ -47,6 +48,7 @@ export function LibraryScreen({
   bookmarksById,
   increaseUserTrustScore,
   userTrustScore,
+  bookmarkSyncStatus = {},
 }: LibraryScreenProps) {
 
   const [activeCategoryId, setActiveCategoryId] = useState<string>(
@@ -349,6 +351,7 @@ export function LibraryScreen({
                   isBookmarked={isBookmarked(tweet.id)}
                   onBookmarkClick={() => handleRemoveBookmark(tweet.id)}
                   onMenuClick={() => setActiveSheet({ type: 'tweet-menu', tweetId: tweet.id })}
+                  syncStatus={bookmarkSyncStatus[tweet.id] || 'none'}
                 />
               </motion.div>
             ))}

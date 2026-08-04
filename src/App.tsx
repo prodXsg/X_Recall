@@ -2,6 +2,17 @@ import { useState, useReducer, useCallback, useEffect } from 'react';
 import { FeedScreen } from './FeedScreen';
 import { LibraryScreen } from './LibraryScreen';
 import { motion, AnimatePresence } from 'motion/react';
+import { syncManager } from './services/syncManager';
+import { crossTabSync } from './services/crossTabSync';
+import { offlineQueue } from './services/offlineQueue';
+import {
+  SyncStatusBar,
+  BookmarkSyncIndicator,
+  ConflictDialog,
+  OfflineQueueStatus,
+  SyncDebugPanel,
+} from './components/sync';
+import { SyncStatus, SyncEvent, SyncConflict } from './services/types';
 
 export interface Tweet {
   id: number;
@@ -16,6 +27,9 @@ export interface Tweet {
   image: string | null;
   category: string;
   bookmarkedAt?: number;
+  version?: number;
+  lastModified?: number;
+  syncStatus?: 'synced' | 'syncing' | 'conflict' | 'offline' | 'none';
   isVideo?: boolean;
   videoDuration?: string;
   isAd?: boolean;
@@ -133,6 +147,8 @@ const INITIAL_CATEGORIES: Category[] = [
   { id: 'design',        name: 'Design',        color: CATEGORY_COLORS[2], createdAt: Date.now() - 3000 },
   { id: 'automobiles',   name: 'Automobiles',   color: CATEGORY_COLORS[3], createdAt: Date.now() - 2000 },
   { id: 'sports',        name: 'Sports',        color: CATEGORY_COLORS[4], createdAt: Date.now() - 1000 },
+  { id: 'fitness',       name: 'Fitness',       color: CATEGORY_COLORS[5], createdAt: Date.now() - 500 },
+  { id: 'health',        name: 'Health',        color: CATEGORY_COLORS[6], createdAt: Date.now() - 400 },
 ];
 
 function generateCategoryId(name: string): string {
@@ -193,24 +209,46 @@ function inferTopicFromTweet(
   const author  = tweet.author.toLowerCase();
   const existingNames = existingCategories.map(c => c.name);
 
+  console.log(`[Classify] Tweet #${tweet.id}: "${tweet.content.substring(0, 50)}..."`);
+  console.log(`[Classify] Author: "${tweet.author}" | TrustScore: ${trustScore}`);
+
+  // Check correction history (highest priority)
   for (const correction of correctionHistory) {
     if (content.includes(correction.keywordPattern.toLowerCase())) {
       const learnedConfidence = Math.min(0.88 + (trustScore / 100) * 0.10, 0.98);
+      console.log(`[Classify] ✓ LEARNED: User corrected to "${correction.newCategory}" (keyword: "${correction.keywordPattern}") | Confidence: ${learnedConfidence}`);
       return { category: correction.newCategory, confidence: learnedConfidence, matchedKeywords: [correction.keywordPattern] };
     }
   }
 
   let best: { category: string; matchedKeywords: string[]; count: number } | null = null;
+  const categoryMatches: Record<string, { keywords: string[]; count: number }> = {};
 
+  // Two passes: first check existing categories, then others
   for (const pass of [true, false]) {
+    const passType = pass ? 'EXISTING' : 'NEW';
+    console.log(`[Classify] Pass ${passType} (${pass ? 'existing' : 'new'} categories):`);
+
     for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
       if (pass !== existingNames.includes(category)) continue;
       const matched = keywords.filter(kw => content.includes(kw) || author.includes(kw));
-      if (matched.length > 0 && (!best || matched.length > best.count)) {
-        best = { category, matchedKeywords: matched, count: matched.length };
+
+      if (matched.length > 0) {
+        categoryMatches[category] = { keywords: matched, count: matched.length };
+        console.log(`  - ${category}: ${matched.length} keywords (${matched.slice(0, 3).join(', ')}${matched.length > 3 ? '...' : ''})`);
+
+        if (!best || matched.length > best.count) {
+          if (best) {
+            console.log(`    → Replacing "${best.category}" (${best.count} keywords) with "${category}" (${matched.length} keywords)`);
+          }
+          best = { category, matchedKeywords: matched, count: matched.length };
+        }
       }
     }
-    if (best) break;
+    if (best) {
+      console.log(`[Classify] ✓ WINNER FOUND IN PASS ${passType}: "${best.category}"`);
+      break;
+    }
   }
 
   if (best) {
@@ -218,9 +256,11 @@ function inferTopicFromTweet(
     const boost      = Math.min(best.count * 0.12, 0.35);
     const trustBonus = (trustScore / 100) * 0.06;
     const confidence = Math.min(base + boost + trustBonus, 0.96);
+    console.log(`[Classify] 🎯 SEMANTIC WIN: "${best.category}" | Keywords: ${best.matchedKeywords.length} | Base: ${base} + Boost: ${boost.toFixed(2)} + Trust: ${trustBonus.toFixed(2)} = ${confidence.toFixed(2)}`);
     return { category: best.category, confidence, matchedKeywords: best.matchedKeywords };
   }
 
+  console.log(`[Classify] ⚠️ NO MATCH: Using fallback category "${tweet.category}" with confidence 0.38`);
   return { category: tweet.category, confidence: 0.38, matchedKeywords: [] };
 }
 
@@ -336,11 +376,112 @@ export default function App() {
 
   const [userTrustScore, setUserTrustScore] = useState(75);
 
+  // Sync state
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
+  const [secondsSinceSync, setSecondsSinceSync] = useState(-1);
+  const [conflict, setConflict] = useState<SyncConflict | null>(null);
+  const [queueStatus, setQueueStatus] = useState({ total: 0, pending: 0, failed: 0 });
+  const [bookmarkSyncStatus, setBookmarkSyncStatus] = useState<Record<number, 'synced' | 'syncing' | 'conflict' | 'offline' | 'none'>>(
+    () => lsGet<Record<number, 'synced' | 'syncing' | 'conflict' | 'offline' | 'none'>>('xrecall_bookmark_sync_status') ?? {}
+  );
+
   useEffect(() => {
     lsSet(LS_KEYS.store,       store);
     lsSet(LS_KEYS.categories,  categories);
     lsSet(LS_KEYS.corrections, correctionHistory);
-  }, [store, categories, correctionHistory]);
+    lsSet('xrecall_bookmark_sync_status', bookmarkSyncStatus);
+  }, [store, categories, correctionHistory, bookmarkSyncStatus]);
+
+  // Sync event listeners
+  useEffect(() => {
+    const unsubscribeSync = syncManager.subscribe((event: SyncEvent) => {
+      console.log('[App] 📨 Sync event received:', event.type, event);
+      if (event.type === 'sync:status-changed' && event.status) {
+        setSyncStatus(event.status);
+        if (event.status === 'synced') {
+          setSecondsSinceSync(0);
+        }
+      } else if (event.type === 'conflict:detected' && event.bookmarkId) {
+        setBookmarkSyncStatus(prev => ({
+          ...prev,
+          [event.bookmarkId]: 'conflict',
+        }));
+        setConflict({
+          bookmarkId: event.bookmarkId,
+          local: { id: event.bookmarkId, version: 1, lastModified: 0, lastModifiedBy: 'local', data: {} },
+          remote: { id: event.bookmarkId, version: 2, lastModified: 0, lastModifiedBy: 'remote', data: {} },
+          winner: 'remote',
+        });
+      } else if (event.type === 'bookmark:created' && event.bookmarkId && event.sourceTab) {
+        // Only process from other tabs, not from own broadcasts
+        if (event.sourceTab === crossTabSync.getTabId()) {
+          console.log(`[App] ⊘ Skipping own bookmark:created broadcast`);
+          return;
+        }
+        console.log(`[App] ✓ HANDLING bookmark:created from ${event.sourceTab}:`, event.bookmarkId);
+        const saved = lsGet<BookmarkStore>(LS_KEYS.store);
+        if (saved && saved.byId[event.bookmarkId]) {
+          const tweet = saved.byId[event.bookmarkId];
+          const catId = saved.tweetToFolder[event.bookmarkId];
+          if (catId && !store.byId[event.bookmarkId]) {
+            console.log(`[App] 📥 Adding bookmark ${event.bookmarkId} to local store`);
+            dispatch({ type: 'ADD', tweet, categoryId: catId });
+          }
+        }
+        setBookmarkSyncStatus(prev => ({ ...prev, [event.bookmarkId]: 'synced' }));
+      } else if (event.type === 'bookmark:deleted' && event.bookmarkId && event.sourceTab) {
+        if (event.sourceTab === crossTabSync.getTabId()) {
+          console.log(`[App] ⊘ Skipping own bookmark:deleted broadcast`);
+          return;
+        }
+        console.log(`[App] ✓ HANDLING bookmark:deleted from ${event.sourceTab}:`, event.bookmarkId);
+        if (store.byId[event.bookmarkId]) {
+          console.log(`[App] 📥 Removing bookmark ${event.bookmarkId} from local store`);
+          dispatch({ type: 'REMOVE', tweetId: event.bookmarkId });
+        }
+        setBookmarkSyncStatus(prev => ({ ...prev, [event.bookmarkId]: 'synced' }));
+      } else if (event.type === 'bookmark:updated' && event.bookmarkId && event.sourceTab) {
+        if (event.sourceTab === crossTabSync.getTabId()) {
+          console.log(`[App] ⊘ Skipping own bookmark:updated broadcast`);
+          return;
+        }
+        console.log(`[App] ✓ HANDLING bookmark:updated from ${event.sourceTab}:`, event.bookmarkId);
+        const saved = lsGet<BookmarkStore>(LS_KEYS.store);
+        if (saved && saved.byId[event.bookmarkId]) {
+          const newCatId = saved.tweetToFolder[event.bookmarkId];
+          const oldCatId = store.tweetToFolder[event.bookmarkId];
+          if (oldCatId && newCatId && oldCatId !== newCatId) {
+            console.log(`[App] 📥 Moving bookmark ${event.bookmarkId} from ${oldCatId} to ${newCatId}`);
+            dispatch({ type: 'MOVE', tweetId: event.bookmarkId, fromCategoryId: oldCatId, toCategoryId: newCatId });
+          }
+        }
+        setBookmarkSyncStatus(prev => ({ ...prev, [event.bookmarkId]: 'synced' }));
+      }
+    });
+
+    const unsubscribeQueue = offlineQueue.subscribe((queue) => {
+      setQueueStatus({
+        total: queue.length,
+        pending: queue.filter(i => i.operation.status === 'pending').length,
+        failed: queue.filter(i => i.operation.status === 'failed').length,
+      });
+    });
+
+    return () => {
+      unsubscribeSync();
+      unsubscribeQueue();
+    };
+  }, []);
+
+  // Update sync time display
+  useEffect(() => {
+    if (syncStatus !== 'synced') return;
+    const interval = setInterval(() => {
+      const secs = syncManager.getSecondsSinceSync();
+      setSecondsSinceSync(secs);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [syncStatus]);
 
   const handleBackToFeed = useCallback(() => {
     setActiveScreen('feed');
@@ -373,9 +514,15 @@ export default function App() {
       matchedKeywords: inference.matchedKeywords,
     };
 
+    const now = Date.now();
+    const version = (store.byId[tweet.id]?.version ?? 0) + 1;
+
     const tweetWithMeta: Tweet = {
       ...tweet,
-      bookmarkedAt: Date.now(),
+      bookmarkedAt: now,
+      version,
+      lastModified: now,
+      syncStatus: 'syncing',
       bookmarkMeta: {
         category:        meta.category,
         confidence:      meta.confidence,
@@ -384,12 +531,27 @@ export default function App() {
       },
     };
 
+    // Add locally first (optimistic)
     dispatch({ type: 'ADD', tweet: tweetWithMeta, categoryId: target.id });
+    setBookmarkSyncStatus(prev => ({ ...prev, [tweet.id]: 'syncing' }));
+
+    // Then sync to backend
+    syncManager.createBookmark(tweet.id, target.id, tweetWithMeta).then((op) => {
+      if (op.status === 'completed') {
+        setBookmarkSyncStatus(prev => ({ ...prev, [tweet.id]: 'synced' }));
+      } else {
+        setBookmarkSyncStatus(prev => ({ ...prev, [tweet.id]: 'offline' }));
+      }
+    });
+
     return { categoryId: target.id, categoryName: target.name, meta };
-  }, [categories, correctionHistory, userTrustScore]);
+  }, [categories, correctionHistory, userTrustScore, store]);
 
   const removeBookmark = useCallback((tweetId: number) => {
     const categoryId = store.tweetToFolder[tweetId];
+    setBookmarkSyncStatus(prev => ({ ...prev, [tweetId]: 'syncing' }));
+
+    // Remove locally first (optimistic)
     dispatch({ type: 'REMOVE', tweetId });
     if (categoryId) {
       const remaining = (store.folderToTweets[categoryId] || []).filter(id => id !== tweetId);
@@ -401,6 +563,15 @@ export default function App() {
         });
       }
     }
+
+    // Then sync deletion
+    syncManager.deleteBookmark(tweetId).then((op) => {
+      if (op.status === 'completed') {
+        setBookmarkSyncStatus(prev => ({ ...prev, [tweetId]: 'synced' }));
+      } else {
+        setBookmarkSyncStatus(prev => ({ ...prev, [tweetId]: 'offline' }));
+      }
+    });
   }, [store, selectedFolderId]);
 
   const isBookmarked = useCallback((tweetId: number): boolean => tweetId in store.byId, [store]);
@@ -445,6 +616,9 @@ export default function App() {
     ]);
 
     setUserTrustScore(prev => Math.max(0, prev - 4));
+    setBookmarkSyncStatus(prev => ({ ...prev, [tweetId]: 'syncing' }));
+
+    // Move locally first (optimistic)
     dispatch({ type: 'MOVE', tweetId, fromCategoryId, toCategoryId: newCategoryId });
 
     const remaining = (store.folderToTweets[fromCategoryId] || []).filter(id => id !== tweetId);
@@ -455,6 +629,16 @@ export default function App() {
         return next;
       });
     }
+
+    // Then sync the update
+    const updatedTweet = { ...tweet, version: (tweet.version ?? 0) + 1, lastModified: Date.now() };
+    syncManager.updateBookmark(tweetId, newCategoryId, updatedTweet).then((op) => {
+      if (op.status === 'completed') {
+        setBookmarkSyncStatus(prev => ({ ...prev, [tweetId]: 'synced' }));
+      } else {
+        setBookmarkSyncStatus(prev => ({ ...prev, [tweetId]: 'offline' }));
+      }
+    });
   }, [store, categories, selectedFolderId]);
 
   const increaseUserTrustScore = useCallback(() => {
@@ -470,7 +654,34 @@ export default function App() {
   }, [store]);
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-8 overflow-x-hidden">
+    <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center p-8 overflow-x-hidden">
+      {/* Sync Status UI */}
+      <div className="fixed top-4 left-4 right-4 z-40 space-y-2 max-w-sm">
+        <SyncStatusBar status={syncStatus} secondsSinceSync={secondsSinceSync} />
+        {queueStatus.total > 0 && (
+          <OfflineQueueStatus
+            pending={queueStatus.pending}
+            failed={queueStatus.failed}
+            isOnline={syncStatus !== 'offline'}
+            onRetry={() => syncManager.syncNow()}
+          />
+        )}
+      </div>
+
+      {/* Conflict Dialog */}
+      <ConflictDialog
+        conflict={conflict}
+        onResolve={(winner) => {
+          if (conflict) {
+            setBookmarkSyncStatus(prev => ({ ...prev, [conflict.bookmarkId]: 'synced' }));
+          }
+        }}
+        onClose={() => setConflict(null)}
+      />
+
+      {/* Debug Panel */}
+      <SyncDebugPanel />
+
       <div className="relative">
         <div className="absolute inset-0 bg-black/20 blur-2xl scale-95" />
         <div className="relative w-[393px] h-[852px] bg-black rounded-[3rem] overflow-hidden shadow-2xl">
@@ -493,6 +704,7 @@ export default function App() {
                   categories={categories}
                   bookmarksById={store.byId}
                   increaseUserTrustScore={increaseUserTrustScore}
+                  bookmarkSyncStatus={bookmarkSyncStatus}
                 />
               </motion.div>
             )}
@@ -518,6 +730,7 @@ export default function App() {
                   bookmarksById={store.byId}
                   increaseUserTrustScore={increaseUserTrustScore}
                   userTrustScore={userTrustScore}
+                  bookmarkSyncStatus={bookmarkSyncStatus}
                 />
               </motion.div>
             )}
