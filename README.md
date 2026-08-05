@@ -1,55 +1,37 @@
- # X Recall — AI-Powered Bookmark Organization for X
+# X Recall — AI-Powered Bookmark Organization for X
 
 A working React prototype that solves one of X's most overlooked product failures: users save content with intent but almost never retrieve it. X bookmarks are a flat, chronological list with no structure. A junk drawer that makes retrieval nearly impossible.
 
 X Recall fixes this by automatically classifying every bookmarked tweet into a smart folder at the moment of save, using a three-signal AI inference engine. Zero clicks required from the user. Zero interruption to the scroll flow
 
-**[View Live Prototype](https://x-recall-prototype.vercel.app/)**
-
----
+[View Live Prototype](https://x-recall-prototype.vercel.app/)
 
 ## The Problem
 
-Fewer than 25% of saved content across read-later platforms is ever
-reopened. On X, where saves are impulsive and context-dependent, this
-rate is estimated lower. The failure is not in saving. It is in
-retrieval. Users already show intent by bookmarking. The product just
-throws that signal away.
+Fewer than 25% of saved content across read-later platforms is ever reopened. On X, where saves are impulsive and context-dependent, this rate is estimated lower. The failure is not in saving. It is in retrieval. Users already show intent by bookmarking. The product just throws that signal away.
 
 ## The AI Enhancement
 
-A three-signal inference engine classifies every tweet the moment it
-is bookmarked:
+A three-signal inference engine classifies every tweet the moment it is bookmarked:
 
-- **Signal 1: Correction Learning.** Checks the user's correction
-  history first. If a similar tweet was previously moved to a
-  different folder, the learned category is returned at 0.88 to 0.98
-  confidence. Persisted across sessions via localStorage.
+* **Signal 1: Correction Learning.** Checks the user's correction history first. If a similar tweet was previously moved to a different folder, the learned category is returned at 0.88 to 0.98 confidence. Persisted across sessions via localStorage.
+* **Signal 2: Semantic Analysis.** Keyword dictionary across 12 categories and 100+ domain-specific terms. Matches on tweet content and author name simultaneously.
+* **Signal 3: Author Authority.** Bayesian prior from account name. ESPN maps to Sports. BBCNews maps to News. Contributes alongside semantic matching.
 
-- **Signal 2: Semantic Analysis.** Keyword dictionary across 12
-  categories and 100+ domain-specific terms. Matches on tweet content
-  and author name simultaneously.
-
-- **Signal 3: Author Authority.** Bayesian prior from account name.
-  ESPN maps to Sports. BBCNews maps to News. Contributes alongside
-  semantic matching.
-
-Low-confidence classifications (below 75%) route to an Unsorted inbox
-rather than auto-filing incorrectly. Every manual correction trains
-the model and adjusts a live trust score.
+Low-confidence classifications (below 75%) route to an Unsorted inbox rather than auto-filing incorrectly. Every manual correction trains the model and adjusts a live trust score.
 
 ## Key Features
 
-- Zero-click save: AI classifies and files on bookmark tap
-- Confidence scoring with Unsorted inbox for low-confidence saves
-- Correction loop: manual moves train the model, persisted across sessions
-- Semantic search across all folders simultaneously
-- Folder management: create, rename, delete, reorder
-- AI explanation sheet: shows matched keywords and confidence
-- Trust score system: rises with accepted saves, falls with corrections
-- localStorage persistence: bookmarks survive page refresh
-- iOS-accurate UI: status bar, Grok nav icon, Following tab, profile drawer
-- Demo reset button: wipes localStorage and reloads to seed state
+* Zero-click save: AI classifies and files on bookmark tap
+* Confidence scoring with Unsorted inbox for low-confidence saves
+* Correction loop: manual moves train the model, persisted across sessions
+* Semantic search across all folders simultaneously
+* Folder management: create, rename, delete, reorder
+* AI explanation sheet: shows matched keywords and confidence
+* Trust score system: rises with accepted saves, falls with corrections
+* localStorage persistence: bookmarks survive page refresh
+* iOS-accurate UI: status bar, Grok nav icon, Following tab, profile drawer
+* Demo reset button: wipes localStorage and reloads to seed state
 
 ## How It Works
 
@@ -60,27 +42,39 @@ the model and adjusts a live trust score.
 5. If wrong, user moves it manually and AI learns and corrects itself
 6. On next similar tweet, learned category is applied at high confidence
 
+## 🔄 Production-Grade Cross-Device Sync
+
+Real-time synchronization across browser tabs demonstrating distributed systems design:
+
+* **Instant Cross-Tab Sync**: Bookmark in Tab A → appears in Tab B within ~1.5 seconds
+* **Optimistic Updates**: UI updates immediately, sync happens in background
+* **Offline Support**: Operations queue locally if offline, auto-retry on reconnect
+* **Version Tracking**: Conflict resolution using Last-Write-Wins with timestamps
+* **BroadcastChannel API**: Real-time messaging with storage event fallback
+
+### Architecture
+See `docs/SYNC_ARCHITECTURE.md` for technical details on distributed state management, conflict resolution, and offline-first design.
+
+### Quick Test
+Open https://x-recall-prototype.vercel.app/ in two browser tabs. Bookmark a tweet in one tab and watch it sync to the other within ~2 seconds.
+
 ## Documentation
 
-[User Flow](https://prodxsg.github.io/X_Recall/x-recall-user-flow.html)
-[AI Architecture](https://prodxsg.github.io/X_Recall/x-recall-ai-architecture.html)
-[Technical Architecture](https://prodxsg.github.io/X_Recall/x-recall-technical-architecture.html)
+[User Flow](https://prodxsg.github.io/X_Recall/x-recall-user-flow.html) | [AI Architecture](https://prodxsg.github.io/X_Recall/x-recall-ai-architecture.html) | [Technical Architecture](https://prodxsg.github.io/X_Recall/x-recall-technical-architecture.html) | [Sync Architecture](docs/SYNC_ARCHITECTURE.md)
 
 ## Architecture Highlights
 
-- useReducer with lazy initializer for normalized bookmark state
-  across three maps: byId, tweetToFolder, folderToTweets
-- addBookmark returns category meta synchronously, no setTimeout
-  race condition
-- Single ActiveSheet discriminated union type replaces three boolean
-  flags, invalid sheet states impossible at the type level
-- localStorage persistence via useEffect with try-catch wrapped
-  lsGet and lsSet helpers
-- useMemo on feed list, useCallback on all handlers
+* useReducer with lazy initializer for normalized bookmark state across three maps: byId, tweetToFolder, folderToTweets
+* addBookmark returns category meta synchronously, no setTimeout race condition
+* Single ActiveSheet discriminated union type replaces three boolean flags, invalid sheet states impossible at the type level
+* localStorage persistence via useEffect with try-catch wrapped lsGet and lsSet helpers
+* useMemo on feed list, useCallback on all handlers
+* BroadcastChannel for cross-tab communication with storage event fallback
+* Offline queue with automatic retry and version tracking
 
 ## Tech Stack
 
-React, TypeScript, Vite, Tailwind CSS, Framer Motion, Figma
+React, TypeScript, Vite, Tailwind CSS, Framer Motion, Figma, BroadcastChannel API
 
 ## Run Locally
 
@@ -88,4 +82,3 @@ React, TypeScript, Vite, Tailwind CSS, Framer Motion, Figma
 npm install
 npm run dev
 ```
-
