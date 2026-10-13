@@ -57,9 +57,6 @@ Real-time synchronization across browser tabs demonstrating distributed systems 
 ### Architecture
 See `docs/SYNC_ARCHITECTURE.md` for technical details on distributed state management, conflict resolution, and offline-first design.
 
-### Quick Test
-Open https://x-recall-prototype.vercel.app/ in two browser tabs. Bookmark a tweet in one tab and watch it sync to the other within ~2 seconds.
-
 ## Documentation
 
 [User Flow](https://prodxsg.github.io/X_Recall/x-recall-user-flow.html) | [AI Architecture](https://prodxsg.github.io/X_Recall/x-recall-ai-architecture.html) | [Technical Architecture](https://prodxsg.github.io/X_Recall/x-recall-technical-architecture.html) | [Sync Architecture](docs/SYNC_ARCHITECTURE.md)
