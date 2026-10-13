@@ -8,6 +8,8 @@ X Recall proves the concept. Bookmarked tweets classify themselves into smart fo
 
 [View Live Prototype](https://x-recall-prototype.vercel.app/)
 
+[▶ Watch the X Recall correction-learning demo](X_Recall_gif.mp4)
+
 ## The Problem
 
 Fewer than 25% of saved content across read-later platforms is ever reopened. On X, where saves are impulsive and context-dependent, this rate is estimated lower. The failure is not in saving. It is in retrieval. Users already show intent by bookmarking. The product just throws that signal away.
