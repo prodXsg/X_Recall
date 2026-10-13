@@ -48,8 +48,8 @@ Low-confidence classifications (below 75%) route to an Unsorted inbox rather tha
 
 X's bookmark feature captures 3+ billion intent signals per month. Right now those signals vanish into a junk drawer. Automatic AI classification unlocks three revenue streams: 
 1. Intent-based ad placements in organized folders (2–5x CPM premium over feed ads)
-2. Reduced churn—users who organize their saves stay longer and engage more
-3. Switching cost—organized bookmarks lock users into the platform and away from read-later competitors like Pocket and Notion.
+2. Reduced churn: Users who organize their saves stay longer and engage more
+3. Switching cost: Organized bookmarks lock users into the platform and away from read-later competitors like Pocket and Notion.
 
 The correction learning loop also creates a proprietary dataset: every user correction teaches the model their personal categorization preferences. This data becomes more valuable over time and harder for competitors to replicate.
 
