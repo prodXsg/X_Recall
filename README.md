@@ -59,6 +59,8 @@ See `docs/SYNC_ARCHITECTURE.md` for technical details on distributed state manag
 
 ## Documentation
 
+Comprehensive guides to the user experience, AI engine design, and technical architecture:
+
 [User Flow](https://prodxsg.github.io/X_Recall/x-recall-user-flow.html) | [AI Architecture](https://prodxsg.github.io/X_Recall/x-recall-ai-architecture.html) | [Technical Architecture](https://prodxsg.github.io/X_Recall/x-recall-technical-architecture.html) | [Sync Architecture](docs/SYNC_ARCHITECTURE.md)
 
 ## Architecture Highlights
