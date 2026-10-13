@@ -638,6 +638,14 @@ export default function App() {
       .sort((a, b) => (b.bookmarkedAt || 0) - (a.bookmarkedAt || 0));
   }, [store]);
 
+  const addCategory = useCallback((name: string): Category => {
+    const newId = generateCategoryId(name);
+    const newColor = getCategoryColor(categories.length);
+    const newCategory: Category = { id: newId, name, color: newColor, createdAt: Date.now() };
+    setCategories(prev => [newCategory, ...prev]);
+    return newCategory;
+  }, [categories.length]);
+
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center p-8 overflow-x-hidden">
       {/* Conflict Dialog */}
@@ -693,6 +701,7 @@ export default function App() {
                   removeBookmark={removeBookmark}
                   renameCategory={renameCategory}
                   deleteCategory={deleteCategory}
+                  addCategory={addCategory}
                   initialSelectedFolderId={selectedFolderId}
                   isBookmarked={isBookmarked}
                   moveBookmark={moveBookmark}
