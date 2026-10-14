@@ -1,4 +1,4 @@
-# X Recall — AI-Powered Bookmark Organization for X
+<h1 align="center">X Recall — AI-Powered Bookmark Organization for X</h1>
 
 X offers bookmark collections in Premium. But organizing requires friction: manually creating folders, choosing categories, moving each tweet. This is why most saves go untouched...the feature exists, but the UX fails.
 
