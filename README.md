@@ -1,5 +1,9 @@
 <h1 align="center">X Recall — AI-Powered Bookmark Organization for X</h1>
 
+<p align="center">
+  <img src="X_Recall.gif" alt="X Recall demo" width="800">
+</p>
+
 X offers bookmark collections in Premium. But organizing requires friction: manually creating folders, choosing categories, moving each tweet. This is why most saves go untouched...the feature exists, but the UX fails.
 
 Users bookmark with intent. X throws that signal away. This is the gap: frictionless organization at save time transforms bookmarks from a junk drawer into a high-intent ad inventory. It also creates switching costs, as users who organize their saves stay.
