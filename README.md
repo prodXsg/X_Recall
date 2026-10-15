@@ -1,4 +1,4 @@
-<h1 align="center">X Recall — AI-Powered Bookmark Organization for X</h1>
+<h1 align="center">X Recall: AI-Powered Bookmark Organization for X</h1>
 
 <p align="center">
   <img src="X_Recall.gif" alt="X Recall demo" width="250">
