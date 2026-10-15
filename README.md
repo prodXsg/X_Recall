@@ -89,10 +89,3 @@ Comprehensive guides to the user experience, AI engine design, and technical arc
 ## Tech Stack
 
 React, TypeScript, Vite, Tailwind CSS, Framer Motion, Figma, BroadcastChannel API
-
-## Run Locally
-
-```bash
-npm install
-npm run dev
-```
