@@ -208,4 +208,11 @@ export const feedTweets: Tweet[] = [
     avatar: 'https://images.unsplash.com/photo-1699638260430-a806c47d6537?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
     comments: 87, retweets: 178, likes: 623, image: null, category: 'Design',
   },
+  {
+    id: 40,
+    author: 'Elon Musk', handle: '@elonmusk', time: '2h',
+    content: 'Tesla\'s new AI chip for vehicles achieves 2x faster neural inference. Developers can now code EV algorithms via our REST API. The future 🧠⚡',
+    avatar: 'https://images.unsplash.com/photo-1633356122544-f134324ef6db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
+    comments: 4500, retweets: 12000, likes: 8000, image: null, category: 'Automobiles',
+  },
 ];

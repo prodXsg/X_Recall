@@ -11,6 +11,7 @@ interface LibraryScreenProps {
   removeBookmark: (tweetId: number) => void;
   renameCategory: (categoryId: string, newName: string) => boolean;
   deleteCategory: (categoryId: string) => void;
+  addCategory: (name: string) => Category;
   initialSelectedFolderId: string | null;
   isBookmarked: (tweetId: number) => boolean;
   moveBookmark: (tweetId: number, newCategoryId: string) => void;
@@ -42,6 +43,7 @@ export function LibraryScreen({
   removeBookmark,
   renameCategory,
   deleteCategory,
+  addCategory,
   initialSelectedFolderId,
   isBookmarked,
   moveBookmark,
@@ -63,6 +65,8 @@ export function LibraryScreen({
   const [searchQuery,  setSearchQuery]  = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [showToast,    setShowToast]    = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+  const [newFolderError, setNewFolderError] = useState('');
 
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasInit        = useRef(false);
@@ -159,6 +163,26 @@ export function LibraryScreen({
       setToastMessage(`Moved to ${newCat.name}`);
       setShowToast(true);
     }
+  };
+
+  // ── Create new folder handler ───────────────────────────────────────────────
+
+  const handleCreateFolder = () => {
+    const trimmed = newFolderName.trim();
+    if (!trimmed) {
+      setNewFolderError('Folder name cannot be empty');
+      return;
+    }
+    const duplicate = categories.some(c => c.name.toLowerCase() === trimmed.toLowerCase());
+    if (duplicate) {
+      setNewFolderError('A folder with this name already exists');
+      return;
+    }
+    const newCategory = addCategory(trimmed);
+    setNewFolderName('');
+    setNewFolderError('');
+    setToastMessage(`Created ${newCategory.name}`);
+    setShowToast(true);
   };
 
   // ── Remove bookmark ─────────────────────────────────────────────────────────
@@ -496,8 +520,30 @@ export function LibraryScreen({
       {/* Move to folder sheet */}
       <AnimatePresence>
         {activeSheet?.type === 'tweet-move' && (
-          <BottomSheet onClose={() => setActiveSheet(null)} className="max-h-[60vh] overflow-y-auto">
+          <BottomSheet onClose={() => { setActiveSheet(null); setNewFolderName(''); setNewFolderError(''); }} className="max-h-[60vh] overflow-y-auto">
             <h3 className="text-white text-lg font-bold mb-4">Move to folder</h3>
+
+            {/* Create new folder input */}
+            <div className="mb-5 pb-4 border-b border-zinc-800">
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={newFolderName}
+                  onChange={e => { setNewFolderName(e.target.value); setNewFolderError(''); }}
+                  onKeyDown={e => e.key === 'Enter' && handleCreateFolder()}
+                  placeholder="New folder name"
+                  className="flex-1 bg-zinc-800 text-white text-sm px-3 py-2 rounded-lg border border-zinc-700 focus:border-[#1D9BF0] focus:outline-none transition-colors"
+                />
+                <button
+                  onClick={handleCreateFolder}
+                  className="px-4 py-2 bg-[#1D9BF0] text-white text-sm font-semibold rounded-lg hover:bg-[#1a8cd8] transition-colors"
+                >
+                  Create
+                </button>
+              </div>
+              {newFolderError && <p className="text-red-500 text-xs">{newFolderError}</p>}
+            </div>
+
             <div className="space-y-1">
               {categories
                 .filter(c => c.id !== activeCategoryId)

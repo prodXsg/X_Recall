@@ -1,7 +1,6 @@
 import { Bookmark, Heart, MessageCircle, Repeat2, Share, BarChart2, MoreHorizontal } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Tweet } from './App';
-import { BookmarkSyncIndicator, type SyncIndicatorStatus } from './components/sync';
 
 interface TweetComponentProps {
   tweet: Tweet;
@@ -14,7 +13,6 @@ interface TweetComponentProps {
   isRetweeted?: boolean;
   onLikeClick?: () => void;
   onRetweetClick?: () => void;
-  syncStatus?: SyncIndicatorStatus;
 }
 
 function formatNumber(num: number): string {
@@ -44,7 +42,6 @@ export function TweetComponent({
   isRetweeted = false,
   onLikeClick,
   onRetweetClick,
-  syncStatus = 'none',
 }: TweetComponentProps) {
   const likeCount     = tweet.likes     + (isLiked     ? 1 : 0);
   const retweetCount  = tweet.retweets  + (isRetweeted ? 1 : 0);
@@ -174,7 +171,7 @@ export function TweetComponent({
               <span className="text-[13px] leading-none tabular-nums ml-0.5">{formatNumber(viewCount)}</span>
             </button>
 
-            {/* Bookmark + Share + Sync Status */}
+            {/* Bookmark + Share */}
             <div className="flex items-center gap-1">
               <motion.button
                 whileTap={{ scale: 0.85 }}
@@ -185,7 +182,6 @@ export function TweetComponent({
               >
                 <Bookmark className={`w-[17px] h-[17px] block transition-all ${isBookmarked ? 'fill-[#1D9BF0]' : ''}`} />
               </motion.button>
-              {isBookmarked && <BookmarkSyncIndicator status={syncStatus} bookmarkId={tweet.id} version={tweet.version} lastModified={tweet.lastModified} />}
               <button className="group p-[6px] hover:text-[#1D9BF0] hover:bg-[#1D9BF0]/10 rounded-full transition-colors flex items-center justify-center">
                 <Share className="w-[17px] h-[17px] block" />
               </button>

@@ -7,11 +7,7 @@ import { syncManager } from './services/syncManager';
 import { crossTabSync } from './services/crossTabSync';
 import { offlineQueue } from './services/offlineQueue';
 import {
-  SyncStatusBar,
-  BookmarkSyncIndicator,
   ConflictDialog,
-  OfflineQueueStatus,
-  SyncDebugPanel,
 } from './components/sync';
 import { SyncStatus, SyncEvent, SyncConflict } from './services/types';
 
@@ -380,9 +376,7 @@ export default function App() {
 
   // Sync state
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
-  const [secondsSinceSync, setSecondsSinceSync] = useState(-1);
   const [conflict, setConflict] = useState<SyncConflict | null>(null);
-  const [queueStatus, setQueueStatus] = useState({ total: 0, pending: 0, failed: 0 });
   const [bookmarkSyncStatus, setBookmarkSyncStatus] = useState<Record<number, 'synced' | 'syncing' | 'conflict' | 'offline' | 'none'>>(
     () => lsGet<Record<number, 'synced' | 'syncing' | 'conflict' | 'offline' | 'none'>>('xrecall_bookmark_sync_status') ?? {}
   );
@@ -475,15 +469,6 @@ export default function App() {
     };
   }, []);
 
-  // Update sync time display
-  useEffect(() => {
-    if (syncStatus !== 'synced') return;
-    const interval = setInterval(() => {
-      const secs = syncManager.getSecondsSinceSync();
-      setSecondsSinceSync(secs);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [syncStatus]);
 
   const handleBackToFeed = useCallback(() => {
     setActiveScreen('feed');
@@ -655,21 +640,16 @@ export default function App() {
       .sort((a, b) => (b.bookmarkedAt || 0) - (a.bookmarkedAt || 0));
   }, [store]);
 
+  const addCategory = useCallback((name: string): Category => {
+    const newId = generateCategoryId(name);
+    const newColor = getCategoryColor(categories.length);
+    const newCategory: Category = { id: newId, name, color: newColor, createdAt: Date.now() };
+    setCategories(prev => [newCategory, ...prev]);
+    return newCategory;
+  }, [categories.length]);
+
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center p-8 overflow-x-hidden">
-      {/* Sync Status UI */}
-      <div className="fixed top-4 left-4 right-4 z-40 space-y-2 max-w-sm">
-        <SyncStatusBar status={syncStatus} secondsSinceSync={secondsSinceSync} />
-        {queueStatus.total > 0 && (
-          <OfflineQueueStatus
-            pending={queueStatus.pending}
-            failed={queueStatus.failed}
-            isOnline={syncStatus !== 'offline'}
-            onRetry={() => syncManager.syncNow()}
-          />
-        )}
-      </div>
-
       {/* Conflict Dialog */}
       <ConflictDialog
         conflict={conflict}
@@ -680,9 +660,6 @@ export default function App() {
         }}
         onClose={() => setConflict(null)}
       />
-
-      {/* Debug Panel */}
-      <SyncDebugPanel />
 
       <div className="relative">
         <div className="absolute inset-0 bg-black/20 blur-2xl scale-95" />
@@ -729,6 +706,7 @@ export default function App() {
                   removeBookmark={removeBookmark}
                   renameCategory={renameCategory}
                   deleteCategory={deleteCategory}
+                  addCategory={addCategory}
                   initialSelectedFolderId={selectedFolderId}
                   isBookmarked={isBookmarked}
                   moveBookmark={moveBookmark}
