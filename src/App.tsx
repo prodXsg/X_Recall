@@ -1,6 +1,7 @@
 import { useState, useReducer, useCallback, useEffect } from 'react';
 import { FeedScreen } from './FeedScreen';
 import { LibraryScreen } from './LibraryScreen';
+import { SplashScreen } from './SplashScreen';
 import { motion, AnimatePresence } from 'motion/react';
 import { syncManager } from './services/syncManager';
 import { crossTabSync } from './services/crossTabSync';
@@ -361,6 +362,7 @@ function buildInitialStore(): BookmarkStore {
 type Screen = 'feed' | 'library';
 
 export default function App() {
+  const [showSplash,       setShowSplash]       = useState(true);
   const [activeScreen,     setActiveScreen]     = useState<Screen>('feed');
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
 
@@ -686,6 +688,9 @@ export default function App() {
         <div className="absolute inset-0 bg-black/20 blur-2xl scale-95" />
         <div className="relative w-[393px] h-[852px] bg-black rounded-[3rem] overflow-hidden shadow-2xl">
           <AnimatePresence mode="wait">
+            {showSplash && (
+              <SplashScreen onComplete={() => setShowSplash(false)} />
+            )}
             {activeScreen === 'feed' && (
               <motion.div
                 key="feed"
