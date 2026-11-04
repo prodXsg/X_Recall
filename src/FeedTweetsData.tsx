@@ -9,22 +9,6 @@ export const feedTweets: Tweet[] = [
     comments: 24, retweets: 89, likes: 234, image: null, category: 'Dev Resources',
   },
   {
-    id: 21,
-    author: 'TechPulse', handle: '@TechPulse', time: '15m',
-    content: "Nvidia RTX 5090 unleashed! 🚀 47 TFLOPs of pure GPU power with next-gen CUDA 13.0 support. Data center acceleration hit a new level. AI model inference just got 3x faster. This is the chip dominance we've been waiting for. #GpuCompute",
-    avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
-    comments: 456, retweets: 1234, likes: 5678,
-    image: 'https://cdn.dlcompare.com/others_jpg/upload/news/image/en-leaked-nvidia-rtx-5090-specs-9b088f51-image-9b088f33.jpg.webp',
-    category: 'Technology',
-  },
-  {
-    id: 23,
-    author: 'BBC News', handle: '@BBCNews', time: '45m',
-    content: 'BREAKING: Global climate summit reaches historic agreement on carbon reduction targets for 2030 🌍',
-    avatar: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
-    comments: 1234, retweets: 3456, likes: 8901, image: null, category: 'News',
-  },
-  {
     // ESPN — unique avatar, was sharing with SportsCenter/NFLUpdates
     id: 24,
     author: 'ESPN', handle: '@ESPN', time: '1h',
@@ -33,6 +17,22 @@ export const feedTweets: Tweet[] = [
     comments: 789, retweets: 2345, likes: 9876,
     image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800',
     category: 'Sports', isVideo: true, videoDuration: '0:24',
+  },
+  {
+    id: 21,
+    author: 'TechPulse', handle: '@TechPulse', time: '15m',
+    content: "Nvidia RTX 5090 unleashed! 🚀 47 TFLOPs of pure GPU power with next-gen CUDA 13.0 support. Data center acceleration hit a new level. AI model inference just got 3x faster. This is the chip dominance we've been waiting for. #GpuCompute",
+    avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
+    comments: 456, retweets: 1234, likes: 5678,
+    image: null,
+    category: 'Technology',
+  },
+  {
+    id: 23,
+    author: 'BBC News', handle: '@BBCNews', time: '45m',
+    content: 'BREAKING: Global climate summit reaches historic agreement on carbon reduction targets for 2030 🌍',
+    avatar: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
+    comments: 1234, retweets: 3456, likes: 8901, image: null, category: 'News',
   },
   {
     id: 25,
