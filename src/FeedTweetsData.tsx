@@ -10,12 +10,12 @@ export const feedTweets: Tweet[] = [
   },
   {
     id: 21,
-    author: 'ChefMaria', handle: '@ChefMaria', time: '15m',
-    content: "30-minute weeknight dinners that don't sacrifice flavor! 🍝 Tonight: Creamy garlic shrimp pasta with cherry tomatoes. Recipe in bio!",
-    avatar: 'https://images.unsplash.com/photo-1583394293214-28ded15ee548?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
-    comments: 89, retweets: 234, likes: 892,
-    image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800',
-    category: 'Cooking',
+    author: 'TechPulse', handle: '@TechPulse', time: '15m',
+    content: "Nvidia RTX 5090 unleashed! 🚀 47 TFLOPs of pure GPU power with next-gen CUDA 13.0 support. Data center acceleration hit a new level. AI model inference just got 3x faster. This is the chip dominance we've been waiting for. #GpuCompute",
+    avatar: 'https://images.unsplash.com/photo-1633356122544-f134324ef6db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
+    comments: 456, retweets: 1234, likes: 5678,
+    image: 'https://images.unsplash.com/photo-1591290619762-d8f22e8eaf0e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800',
+    category: 'Technology',
   },
   {
     id: 23,
