@@ -14,7 +14,7 @@ export const feedTweets: Tweet[] = [
     content: "Nvidia RTX 5090 unleashed! 🚀 47 TFLOPs of pure GPU power with next-gen CUDA 13.0 support. Data center acceleration hit a new level. AI model inference just got 3x faster. This is the chip dominance we've been waiting for. #GpuCompute",
     avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100',
     comments: 456, retweets: 1234, likes: 5678,
-    image: 'https://images.unsplash.com/photo-1591091226601-8da23e758d87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800',
+    image: 'https://cdn.dlcompare.com/others_jpg/upload/news/image/en-leaked-nvidia-rtx-5090-specs-9b088f51-image-9b088f33.jpg.webp',
     category: 'Technology',
   },
   {
