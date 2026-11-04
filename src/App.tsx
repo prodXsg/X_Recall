@@ -167,7 +167,7 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
   'Fitness':       ['workout', 'exercise', 'fitness', 'core strength', 'yoga', 'training', 'gym', 'morning workout'],
   'Health':        ['sleep', 'wellness', 'health', 'mediterranean diet', 'doctor', 'nutrition', 'diet'],
   'Entertainment': ['movie', 'netflix', 'film', 'series', 'trailer', 'dune', 'watched', 'binge'],
-  'Technology':    ['tech', 'apple', 'chip', 'neural', 'ai', 'vr', 'headset', 'meta', 'verge', 'quantum', 'm4', 'processor'],
+  'Technology':    ['tech', 'apple', 'chip', 'neural', 'ai', 'vr', 'headset', 'meta', 'verge', 'quantum', 'm4', 'processor', 'nvidia', 'rtx', 'gpu', 'cuda', 'tflops', 'data center', 'gpu compute', 'ai acceleration'],
   'Real Estate':   ['home', 'house', 'zillow', 'property', 'real estate', 'listing'],
 };
 
