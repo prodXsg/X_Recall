@@ -195,7 +195,7 @@ export function FeedScreen({
       <div className="flex items-center justify-between px-4 py-2 relative border-b border-zinc-800/50 shrink-0">
         <button onClick={() => setIsDrawerOpen(true)} className="focus:outline-none">
           <img
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=100"
+            src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=100&h=100&fit=crop"
             alt="Profile"
             className="w-8 h-8 rounded-full object-cover hover:opacity-80 transition-opacity"
           />
